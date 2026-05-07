@@ -1,0 +1,65 @@
+/* =========================
+   BARBEROS
+========================= */
+
+.barberos-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    gap: 25px;
+}
+
+.barbero-card{
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 18px;
+    padding: 25px;
+    transition: 0.3s ease;
+    text-align: center;
+}
+
+.barbero-card:hover{
+    transform: translateY(-5px);
+    border-color: #334155;
+}
+
+.barbero-img{
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 3px solid #2563eb;
+}
+
+.barbero-card h3{
+    color: white;
+    margin-bottom: 10px;
+}
+
+.barbero-card p{
+    color: #94a3b8;
+    margin-bottom: 20px;
+}
+
+.barbero-stats{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.barbero-stat{
+    background: #1e293b;
+    padding: 12px;
+    border-radius: 12px;
+    width: 48%;
+}
+
+.barbero-stat h4{
+    color: white;
+    margin-bottom: 5px;
+}
+
+.barbero-stat span{
+    color: #94a3b8;
+    font-size: 14px;
+}

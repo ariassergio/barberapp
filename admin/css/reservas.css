@@ -1,0 +1,157 @@
+/* =========================
+   HEADER
+========================= */
+
+.reservas-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.reservas-subtitle{
+    color: #94a3b8;
+    margin-top: -10px;
+}
+
+/* =========================
+   BOTON
+========================= */
+
+.new-reserva-btn{
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.new-reserva-btn:hover{
+    background: #1d4ed8;
+}
+
+/* =========================
+   FILTROS
+========================= */
+
+.reservas-filters{
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.reservas-search,
+.reservas-select{
+    background: #111827;
+    border: 1px solid #1e293b;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 12px;
+    outline: none;
+}
+
+.reservas-search{
+    width: 300px;
+}
+
+.reservas-search::placeholder{
+    color: #94a3b8;
+}
+
+.reservas-search:focus,
+.reservas-select:focus{
+    border-color: #2563eb;
+}
+
+/* =========================
+   CLIENTE
+========================= */
+
+.cliente-info{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cliente-avatar{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.cliente-info h4{
+    color: white;
+    font-size: 15px;
+    margin: 0;
+}
+
+.cliente-info span{
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+/* =========================
+   ACCIONES
+========================= */
+
+.reservas-actions{
+    display: flex;
+    gap: 10px;
+}
+
+.reserva-btn{
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-view{
+    background: #16a34a;
+}
+
+.btn-view:hover{
+    background: #15803d;
+}
+
+.btn-edit{
+    background: #2563eb;
+}
+
+.btn-edit:hover{
+    background: #1d4ed8;
+}
+
+.btn-delete{
+    background: #dc2626;
+}
+
+.btn-delete:hover{
+    background: #b91c1c;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width: 768px){
+
+    .reservas-search{
+        width: 100%;
+    }
+
+    .reservas-select{
+        width: 100%;
+    }
+
+}

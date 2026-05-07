@@ -1,0 +1,67 @@
+[
+    {
+        "cliente": "Sergio Arias",
+        "telefono": "2914224883",
+        "servicioId": 1,
+        "servicio": "Corte cl\u00e1sico",
+        "precio": 5000,
+        "peluqueroId": 1,
+        "peluquero": "Mat\u00edas",
+        "fecha": "2026-05-08",
+        "hora": "16:00",
+        "estado": "pendiente",
+        "id": 1
+    },
+    {
+        "cliente": "Marcelo Arias",
+        "telefono": "2914224883",
+        "servicioId": 2,
+        "servicio": "Barba",
+        "precio": 3000,
+        "peluqueroId": 2,
+        "peluquero": "Ezequiel",
+        "fecha": "2026-05-09",
+        "hora": "17:00",
+        "estado": "pendiente",
+        "id": 2
+    },
+    {
+        "cliente": "Pepito",
+        "telefono": "2914224883",
+        "servicioId": 1,
+        "servicio": "Corte cl\u00e1sico",
+        "precio": 5000,
+        "peluqueroId": 3,
+        "peluquero": "Sergio",
+        "fecha": "2026-05-11",
+        "hora": "16:00",
+        "estado": "pendiente",
+        "id": 3
+    },
+    {
+        "cliente": "Pepe",
+        "telefono": "123213213",
+        "servicioId": 2,
+        "servicio": "Barba",
+        "precio": 3000,
+        "peluqueroId": 1,
+        "peluquero": "Mat\u00edas",
+        "fecha": "2026-05-08",
+        "hora": "11:00",
+        "estado": "pendiente",
+        "id": 4
+    },
+    {
+        "cliente": "Pedro",
+        "telefono": "123132213",
+        "servicioId": 1,
+        "servicio": "Corte cl\u00e1sico",
+        "precio": 5000,
+        "peluqueroId": 1,
+        "peluquero": "Mat\u00edas",
+        "fecha": "2026-05-08",
+        "hora": "17:00",
+        "estado": "pendiente",
+        "id": 5
+    }
+]

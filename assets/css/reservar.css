@@ -1,0 +1,330 @@
+body {
+    background-color: #f5f5f5;
+}
+
+/* CARD */
+.card {
+    border-radius: 12px;
+}
+
+/* SERVICIOS */
+.servicio-card {
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center;
+}
+
+.servicio-card:hover {
+    border-color: black;
+    transform: scale(1.03);
+}
+
+.servicio-card.active {
+    border-color: black;
+    background-color: black;
+    color: white;
+}
+
+/* PELUQUEROS */
+.peluquero-btn {
+    border-radius: 20px;
+}
+
+/* HORARIOS */
+#horarios button {
+    min-width: 80px;
+}
+
+#horarios button.active {
+    background-color: black;
+    color: white;
+}
+
+/* 🔹 BANNER */
+.banner-img {
+    height: 300px;
+    object-fit: cover;
+}
+
+/* Opcional: oscurecer un poco para texto encima (futuro) */
+.carousel-item::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+}
+
+/* SECCION */
+.quienes-somos {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.8s ease forwards;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* TITULO */
+.titulo-seccion {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+/* línea decorativa */
+.titulo-seccion::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: black;
+    margin-top: 10px;
+}
+
+/* TEXTO */
+.quienes-somos p {
+    color: #555;
+    line-height: 1.7;
+}
+
+/* FRASE FINAL */
+.frase-final {
+    font-weight: 600;
+    color: black;
+}
+
+/* IMAGEN */
+.img-quienes {
+    border-radius: 12px;
+    max-height: 350px;
+    object-fit: cover;
+}
+
+
+/* SECCION */
+.servicios {
+    padding: 40px 0;
+}
+
+/* CARD */
+.servicio-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: 0.3s;
+    height: 100%;
+}
+
+.servicio-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+/* IMAGEN */
+.servicio-img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* BODY */
+.servicio-body {
+    padding: 20px;
+}
+
+.servicio-body h5 {
+    font-weight: bold;
+}
+
+/* FOOTER */
+.servicio-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.servicio-footer span {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+
+/* RESEÑAS */
+.reseña-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    height: 100%;
+    transition: 0.3s;
+}
+
+.reseña-card:hover {
+    transform: translateY(-5px);
+}
+
+.reseña-card p {
+    font-style: italic;
+    color: #555;
+}
+
+.reseña-card h6 {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+.cta-reserva {
+    background: black;
+    color: white;
+    padding: 60px 20px;
+}
+
+.cta-reserva h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.cta-reserva p {
+    margin-bottom: 20px;
+    color: #ccc;
+}
+
+.cta-reserva .btn {
+    border-radius: 30px;
+    padding: 10px 30px;
+}
+
+/* RESERVAR */
+
+/* CARD */
+.reserva-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* STEPS */
+.steps {
+    display: flex;
+    justify-content: space-between;
+}
+
+.step {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.step.active {
+    background: black;
+    color: white;
+}
+
+/* CONTENIDO */
+.step-content {
+    display: none;
+    animation: fade 0.3s ease;
+}
+
+.step-content.active {
+    display: block;
+}
+
+@keyframes fade {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* RESUMEN */
+.resumen {
+    background: #f5f5f5;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* PANTALLA COMPLETA */
+.success-screen {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* CARD */
+.success-card {
+    background: white;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    animation: scaleIn 0.4s ease;
+}
+
+/* ANIMACION ENTRADA */
+@keyframes scaleIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* CHECK */
+.checkmark {
+    width: 70px;
+    height: 70px;
+    background: #28a745;
+    color: white;
+    font-size: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    animation: pop 0.4s ease;
+}
+
+@keyframes pop {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+/* TEXTO */
+.success-text {
+    color: #555;
+}
+
+/* RESUMEN */
+.success-resumen {
+    margin-top: 15px;
+    text-align: left;
+    font-size: 0.95rem;
+}

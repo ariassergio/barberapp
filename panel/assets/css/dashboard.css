@@ -1,0 +1,70 @@
+body{
+    background: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+.turno-card{
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.08);
+    transition: .3s;
+    height: 100%;
+}
+
+.turno-card:hover{
+    transform: translateY(-5px);
+}
+
+.hora{
+    font-size: 32px;
+    font-weight: bold;
+    color: #111;
+}
+
+.fecha{
+    color: #777;
+    margin-bottom: 15px;
+}
+
+.servicio{
+    font-weight: bold;
+}
+
+.telefono{
+    color: #555;
+}
+.precio{
+    font-size: 18px;
+    font-weight: bold;
+    color: #111;
+    margin-bottom: 10px;
+}
+.estado{
+    margin-top: 15px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.estado-pendiente{
+    background: #fff3cd;
+    color: #856404;
+}
+
+.estado-realizado{
+    background: #d4edda;
+    color: #155724;
+}
+
+.estado-ausente{
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.acciones{
+    display: flex;
+    gap: 10px;
+}

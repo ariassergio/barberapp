@@ -63,5 +63,77 @@
         "hora": "17:00",
         "estado": "pendiente",
         "id": 5
+    },
+    {
+        "cliente": "Pepito",
+        "telefono": "12312321",
+        "servicios": [
+            {
+                "id": 1,
+                "nombre": "Corte cl\u00e1sico",
+                "duracion": 30,
+                "precio": 5000
+            },
+            {
+                "id": 2,
+                "nombre": "Barba",
+                "duracion": 20,
+                "precio": 3000
+            }
+        ],
+        "serviciosTexto": "Corte cl\u00e1sico, Barba",
+        "precioTotal": 8000,
+        "peluqueroId": 2,
+        "peluquero": "Ezequiel",
+        "fecha": "2026-05-13",
+        "hora": "17:00",
+        "estado": "pendiente",
+        "id": 6
+    },
+    {
+        "cliente": "Sergio arias",
+        "telefono": "1234567",
+        "servicios": [
+            {
+                "id": 1,
+                "nombre": "Corte cl\u00e1sico",
+                "duracion": 30,
+                "precio": 5000
+            },
+            {
+                "id": 2,
+                "nombre": "Barba",
+                "duracion": 20,
+                "precio": 3000
+            }
+        ],
+        "serviciosTexto": "Corte cl\u00e1sico, Barba",
+        "precioTotal": 8000,
+        "peluqueroId": 1,
+        "peluquero": "Mat\u00edas",
+        "fecha": "2026-05-12",
+        "hora": "12:00",
+        "estado": "pendiente",
+        "id": 7
+    },
+    {
+        "cliente": "SADSAD",
+        "telefono": "32432432",
+        "servicios": [
+            {
+                "id": 1,
+                "nombre": "Corte cl\u00e1sico",
+                "duracion": 30,
+                "precio": 5000
+            }
+        ],
+        "serviciosTexto": "Corte cl\u00e1sico",
+        "precioTotal": 5000,
+        "peluqueroId": 3,
+        "peluquero": "Sergio",
+        "fecha": "2026-05-14",
+        "hora": "10:00",
+        "estado": "pendiente",
+        "id": 8
     }
 ]

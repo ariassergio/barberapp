@@ -7,11 +7,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     const fechaInput = document.getElementById("fecha");
     const horariosDiv = document.getElementById("horarios");
     const resumenDiv = document.getElementById("resumen");
+    const modalResumen =
+    document.getElementById("modalResumen");
+
+    const confirmModal = new bootstrap.Modal(
+        document.getElementById("confirmModal")
+    );
+
+    const confirmarReservaBtn =
+    document.getElementById("confirmarReserva");
 
     const clienteNombre = document.getElementById("clienteNombre");
     const clienteTelefono = document.getElementById("clienteTelefono");
 
-    let servicioSeleccionado = null;
+    let serviciosSeleccionados = [];
     let peluqueroSeleccionado = null;
     let horarioSeleccionado = null;
 
@@ -32,14 +41,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         col.onclick = () => {
 
-            document.querySelectorAll(".servicio-card")
-                .forEach(c => c.classList.remove("active"));
-
-            col.querySelector(".servicio-card")
-                .classList.add("active");
-
-            servicioSeleccionado = s;
-
+            const card = col.querySelector(".servicio-card");
+        
+            const existe = serviciosSeleccionados.find(
+                servicio => servicio.id === s.id
+            );
+        
+            // 🔹 si ya existe → quitar
+            if (existe) {
+        
+                serviciosSeleccionados =
+                    serviciosSeleccionados.filter(
+                        servicio => servicio.id !== s.id
+                    );
+        
+                card.classList.remove("active");
+        
+            }
+        
+            // 🔹 si no existe → agregar
+            else {
+        
+                serviciosSeleccionados.push(s);
+        
+                card.classList.add("active");
+        
+            }
+        
             actualizarResumen();
         };
 
@@ -120,9 +148,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         resumenDiv.innerHTML = `
             <strong>Resumen:</strong><br>
 
-            Servicio:
-            ${servicioSeleccionado?.nombre || "-"} <br>
+            Servicios:
+            ${serviciosSeleccionados.map(s => s.nombre).join(", ") || "-"} <br>
 
+            Total:
+            $${serviciosSeleccionados.reduce(
+                (acc, s) => acc + s.precio,
+                0
+            )} <br>
             Peluquero:
             ${peluqueroSeleccionado?.nombre || "-"} <br>
 
@@ -176,7 +209,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 🔹 validaciones
     function validarPaso() {
 
-        if (currentStep === 1 && !servicioSeleccionado) {
+        if (currentStep === 1 && serviciosSeleccionados.length === 0) {
 
             alert("Elegí un servicio");
 
@@ -224,78 +257,206 @@ document.addEventListener("DOMContentLoaded", async () => {
         return true;
     }
 
-    // 🔹 siguiente
     nextBtn.onclick = async () => {
 
         if (!validarPaso()) return;
-
+    
+        // 🔹 avanzar pasos
         if (currentStep < 5) {
-
+    
             currentStep++;
-
+    
             updateSteps();
+    
+        }
+    
+        // 🔹 abrir modal confirmación
+        else {
+    
+            modalResumen.innerHTML = `
 
-        } else {
+                <div class="ticket-grid">
 
-            // 🔹 guardar reserva
-            await API.reservarTurno({
+                    <!-- SERVICIOS -->
+                    <div class="ticket-card full">
 
-                cliente: clienteNombre.value,
+                        <span class="ticket-label">
+                            ✂ Servicios
+                        </span>
 
-                telefono: clienteTelefono.value,
+                        <div class="services-chips">
 
-                servicioId: servicioSeleccionado.id,
-                servicio: servicioSeleccionado.nombre,
+                            ${serviciosSeleccionados.map(servicio => `
 
-                precio: servicioSeleccionado.precio,
+                                <span class="service-chip">
+                                    ${servicio.nombre}
+                                </span>
 
+                            `).join("")}
 
-                peluqueroId: peluqueroSeleccionado.id,
-                peluquero: peluqueroSeleccionado.nombre,
+                        </div>
 
-                fecha: fechaInput.value,
+                    </div>
 
-                hora: horarioSeleccionado,
+                    <!-- PELUQUERO -->
+                    <div class="ticket-card">
 
-                estado: "pendiente"
+                        <span class="ticket-label">
+                            👤 Peluquero
+                        </span>
 
-            });
+                        <strong>
+                            ${peluqueroSeleccionado.nombre}
+                        </strong>
 
-            // 🔹 ocultar wizard
-            document.querySelector(".reserva-card")
-                .style.display = "none";
+                    </div>
 
-            // 🔹 éxito
-            const successScreen =
-                document.getElementById("successScreen");
+                    <!-- FECHA -->
+                    <div class="ticket-card">
 
-            const successResumen =
-                document.getElementById("successResumen");
+                        <span class="ticket-label">
+                            📅 Fecha
+                        </span>
 
-            successResumen.innerHTML = `
-                <strong>Cliente:</strong>
-                ${clienteNombre.value} <br>
+                        <strong>
+                            ${fechaInput.value}
+                        </strong>
 
-                <strong>Teléfono:</strong>
-                ${clienteTelefono.value} <br>
+                    </div>
 
-                <strong>Servicio:</strong>
-                ${servicioSeleccionado.nombre} <br>
+                    <!-- HORARIO -->
+                    <div class="ticket-card">
 
-                <strong>Peluquero:</strong>
-                ${peluqueroSeleccionado.nombre} <br>
+                        <span class="ticket-label">
+                            🕒 Horario
+                        </span>
 
-                <strong>Fecha:</strong>
-                ${fechaInput.value} <br>
+                        <strong>
+                            ${horarioSeleccionado}
+                        </strong>
 
-                <strong>Horario:</strong>
-                ${horarioSeleccionado}
+                    </div>
+
+                    <!-- CLIENTE -->
+                    <div class="ticket-card">
+
+                        <span class="ticket-label">
+                            🙍 Cliente
+                        </span>
+
+                        <strong>
+                            ${clienteNombre.value}
+                        </strong>
+
+                    </div>
+
+                    <!-- TELEFONO -->
+                    <div class="ticket-card">
+
+                        <span class="ticket-label">
+                            📞 Teléfono
+                        </span>
+
+                        <strong>
+                            ${clienteTelefono.value}
+                        </strong>
+
+                    </div>
+
+                    <!-- TOTAL -->
+                    <div class="ticket-total full">
+
+                        <span>Total</span>
+
+                        <strong>
+
+                            $${serviciosSeleccionados.reduce(
+                                (acc, s) => acc + s.precio,
+                                0
+                            )}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
             `;
-
-            successScreen.style.display = "flex";
+    
+            confirmModal.show();
         }
     };
+    confirmarReservaBtn.onclick = async () => {
 
+        // 🔹 guardar reserva
+        await API.reservarTurno({
+    
+            cliente: clienteNombre.value,
+    
+            telefono: clienteTelefono.value,
+    
+            servicios: serviciosSeleccionados,
+    
+            serviciosTexto: serviciosSeleccionados
+                .map(s => s.nombre)
+                .join(", "),
+    
+            precioTotal: serviciosSeleccionados
+                .reduce((acc, s) => acc + s.precio, 0),
+    
+            peluqueroId: peluqueroSeleccionado.id,
+    
+            peluquero: peluqueroSeleccionado.nombre,
+    
+            fecha: fechaInput.value,
+    
+            hora: horarioSeleccionado,
+    
+            estado: "pendiente"
+    
+        });
+    
+        // 🔹 cerrar modal
+        confirmModal.hide();
+    
+        // 🔹 ocultar wizard
+        document.querySelector(".reserva-card")
+            .style.display = "none";
+    
+        // 🔹 mostrar éxito
+        const successScreen =
+            document.getElementById("successScreen");
+    
+        const successResumen =
+            document.getElementById("successResumen");
+    
+        successResumen.innerHTML = `
+    
+            <strong>Cliente:</strong>
+            ${clienteNombre.value} <br>
+    
+            <strong>Servicios:</strong>
+            ${serviciosSeleccionados
+                .map(s => s.nombre)
+                .join(", ")} <br>
+    
+            <strong>Total:</strong>
+            $${serviciosSeleccionados
+                .reduce((acc, s) => acc + s.precio, 0)} <br>
+    
+            <strong>Peluquero:</strong>
+            ${peluqueroSeleccionado.nombre} <br>
+    
+            <strong>Fecha:</strong>
+            ${fechaInput.value} <br>
+    
+            <strong>Horario:</strong>
+            ${horarioSeleccionado}
+    
+        `;
+    
+        successScreen.style.display = "flex";
+    };
     // 🔹 atrás
     prevBtn.onclick = () => {
 

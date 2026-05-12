@@ -412,7 +412,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     
             hora: horarioSeleccionado,
     
-            estado: "pendiente"
+            estado: "confirmado"
     
         });
     

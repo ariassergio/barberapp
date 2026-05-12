@@ -1,6 +1,5 @@
 import { servicios } from "./data/servicios.js";
 import { peluqueros } from "./data/peluqueros.js";
-import { reservas } from "./data/reservas.js";
 
 const horariosBase = [
     "09:00",
@@ -25,18 +24,13 @@ export const API = {
 
     getHorarios: async (fecha, peluqueroId) => {
 
-        return horariosBase.filter(hora => {
-
-            return !reservas.some(reserva =>
-                reserva.fecha === fecha &&
-                reserva.peluqueroId === peluqueroId &&
-                reserva.hora === hora
-            );
-
-        });
-
+        const res = await fetch(
+            `api/horarios.php?fecha=${fecha}&peluqueroId=${peluqueroId}`
+        );
+    
+        return await res.json();
+    
     },
-
     reservarTurno: async (data) => {
 
         const res = await fetch("api/reservar.php", {

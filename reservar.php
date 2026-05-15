@@ -1,3 +1,13 @@
+<?php
+
+require_once 'admin/config/db.php';
+
+$sql = "SELECT * FROM servicios
+        WHERE activo = 1";
+
+$resultadoServicios = mysqli_query($conn, $sql);
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -97,6 +107,7 @@
         </div>
 
     </div>
+    
 
 </section>
 
@@ -107,56 +118,56 @@
 
     <div class="row g-4">
 
-        <!-- SERVICIO 1 -->
+        <?php while($servicio = mysqli_fetch_assoc($resultadoServicios)) : ?>
+
         <div class="col-md-4">
+
             <div class="servicio-card">
-                <img src="assets/img/corte.png" class="servicio-img">
+
+                <img
+                    src="assets/img/corte.png"
+                    class="servicio-img">
 
                 <div class="servicio-body">
-                    <h5>Corte de pelo</h5>
-                    <p>Estilo moderno o clásico adaptado a vos.</p>
+
+                    <h5>
+                        <?= $servicio['nombre']; ?>
+                    </h5>
+
+                    <p>
+                        Duración:
+                        <?= $servicio['duracion']; ?>
+                        <?= $servicio['unidad_tiempo']; ?>
+                    </p>
 
                     <div class="servicio-footer">
-                        <span>$3000</span>
-                        <a href="#reserva" class="btn btn-dark btn-sm">Reservar</a>
+
+                        <span>
+                            $<?= number_format(
+                                $servicio['precio'],
+                                0,
+                                ',',
+                                '.'
+                            ); ?>
+                        </span>
+
+                        <a
+                            href="#reserva"
+                            class="btn btn-dark btn-sm">
+
+                            Reservar
+
+                        </a>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
 
-        <!-- SERVICIO 2 -->
-        <div class="col-md-4">
-            <div class="servicio-card">
-                <img src="assets/img/corte.png" class="servicio-img">
-
-                <div class="servicio-body">
-                    <h5>Arreglo de barba</h5>
-                    <p>Perfilado y cuidado profesional.</p>
-
-                    <div class="servicio-footer">
-                        <span>$2000</span>
-                        <a href="#reserva" class="btn btn-dark btn-sm">Reservar</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- SERVICIO 3 -->
-        <div class="col-md-4">
-            <div class="servicio-card">
-                <img src="assets/img/corte.png" class="servicio-img">
-
-                <div class="servicio-body">
-                    <h5>Corte + Barba</h5>
-                    <p>Combo completo para un look impecable.</p>
-
-                    <div class="servicio-footer">
-                        <span>$4500</span>
-                        <a href="#reserva" class="btn btn-dark btn-sm">Reservar</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <?php endwhile; ?>
 
     </div>
 
@@ -277,7 +288,6 @@
             class="form-control"
             placeholder="Tu teléfono"
         >
-
     </div>
 </section>
 
@@ -307,84 +317,6 @@
 
 </div>
 
-<!-- MODAL CONFIRMAR TURNO -->
-<div 
-    class="modal fade confirm-modal"
-    id="confirmModal"
-    tabindex="-1"
->
-
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-
-        <div class="modal-content">
-
-            <!-- DECORACION -->
-            <div class="modal-glow"></div>
-
-            <!-- HEADER -->
-            <div class="modal-header">
-
-                <div class="modal-header-info">
-
-                    <div class="modal-icon">
-                        ✂
-                    </div>
-
-                    <div>
-
-                        <h5 class="modal-title">
-                            Confirmar turno
-                        </h5>
-
-                        <p class="modal-subtitle">
-                            Revisá los datos antes de continuar
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <button 
-                    type="button"
-                    class="btn-close btn-close-white"
-                    data-bs-dismiss="modal"
-                ></button>
-
-            </div>
-
-            <!-- BODY -->
-            <div class="modal-body">
-
-                <div id="modalResumen"></div>
-
-            </div>
-
-            <!-- FOOTER -->
-            <div class="modal-footer">
-
-                <button 
-                    type="button"
-                    class="btn btn-cancelar"
-                    data-bs-dismiss="modal"
-                >
-                    Cancelar
-                </button>
-
-                <button 
-                    type="button"
-                    class="btn btn-confirmar"
-                    id="confirmarReserva"
-                >
-                    Confirmar turno
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
 <!-- 🔹 FOOTER -->
 <footer class="text-center mb-3 text-muted">
     © <?= date("Y") ?> BarberApp

@@ -1,5 +1,4 @@
-import { servicios } from "./data/servicios.js";
-import { peluqueros } from "./data/peluqueros.js";
+
 
 const horariosBase = [
     "09:00",
@@ -14,33 +13,47 @@ const horariosBase = [
 
 export const API = {
 
+    // 🔹 SERVICIOS DESDE MYSQL
     getServicios: async () => {
-        return servicios;
+
+        const response = await fetch("php/obtener_servicios.php");
+
+        return await response.json();
     },
 
     getPeluqueros: async () => {
-        return peluqueros;
+
+        const response = await fetch("php/obtener_profesionales.php");
+
+        return await response.json();
     },
 
+    // 🔹 horarios
     getHorarios: async (fecha, peluqueroId) => {
 
-        const res = await fetch(
-            `api/horarios.php?fecha=${fecha}&peluqueroId=${peluqueroId}`
-        );
-    
-        return await res.json();
-    
-    },
+    const response = await fetch(
+
+        `php/obtener_horarios.php?fecha=${fecha}&peluquero=${peluqueroId}`
+
+    );
+
+    return await response.json();
+},
+
+    // 🔹 guardar turno
     reservarTurno: async (data) => {
 
-        const res = await fetch("api/reservar.php", {
+        const res = await fetch("php/guardar_turno.php", {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify(data)
         });
-    
+
         return await res.json();
     }
 

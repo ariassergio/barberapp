@@ -7,67 +7,53 @@ document.addEventListener("DOMContentLoaded", async () => {
     const fechaInput = document.getElementById("fecha");
     const horariosDiv = document.getElementById("horarios");
     const resumenDiv = document.getElementById("resumen");
-    const modalResumen =
-    document.getElementById("modalResumen");
-
-    const confirmModal = new bootstrap.Modal(
-        document.getElementById("confirmModal")
-    );
-
-    const confirmarReservaBtn =
-    document.getElementById("confirmarReserva");
 
     const clienteNombre = document.getElementById("clienteNombre");
     const clienteTelefono = document.getElementById("clienteTelefono");
 
-    let serviciosSeleccionados = [];
+    let servicioSeleccionado = null;
     let peluqueroSeleccionado = null;
     let horarioSeleccionado = null;
 
     // 🔹 cargar servicios
     const servicios = await API.getServicios();
 
+    console.log(servicios);
+
     servicios.forEach(s => {
 
         const col = document.createElement("div");
+
         col.className = "col-6";
 
         col.innerHTML = `
             <div class="servicio-card">
                 <h6>${s.nombre}</h6>
-                <small>$${s.precio}</small>
+
+                <small>
+                    $${s.precio}
+                </small>
+
+                <div class="mt-1 text-muted">
+
+                    ${s.duracion}
+                    ${s.unidad_tiempo}
+
+                </div>
+
             </div>
         `;
 
         col.onclick = () => {
 
-            const card = col.querySelector(".servicio-card");
-        
-            const existe = serviciosSeleccionados.find(
-                servicio => servicio.id === s.id
-            );
-        
-            // 🔹 si ya existe → quitar
-            if (existe) {
-        
-                serviciosSeleccionados =
-                    serviciosSeleccionados.filter(
-                        servicio => servicio.id !== s.id
-                    );
-        
-                card.classList.remove("active");
-        
-            }
-        
-            // 🔹 si no existe → agregar
-            else {
-        
-                serviciosSeleccionados.push(s);
-        
-                card.classList.add("active");
-        
-            }
-        
+            document.querySelectorAll(".servicio-card")
+                .forEach(c => c.classList.remove("active"));
+
+            col.querySelector(".servicio-card")
+                .classList.add("active");
+
+            servicioSeleccionado = s;
+
             actualizarResumen();
         };
 
@@ -82,8 +68,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const btn = document.createElement("button");
 
-        btn.className = "btn btn-outline-dark peluquero-btn";
-        btn.textContent = p.nombre;
+        btn.className =
+            "btn btn-outline-dark peluquero-btn";
+
+        btn.innerHTML = `
+            ${p.nombre}
+            <small class="d-block">
+                ${p.especialidad || ""}
+            </small>
+        `;
 
         btn.onclick = () => {
 
@@ -94,14 +87,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             peluqueroSeleccionado = p;
 
+            horarioSeleccionado = null;
+
             actualizarResumen();
+
+            // 🔥 si ya eligió fecha
+            // actualizar horarios automáticamente
+            if(fechaInput.value){
+
+                renderHorarios();
+            }
         };
 
         peluquerosDiv.appendChild(btn);
 
     });
 
-    // 🔹 horarios
+    // 🔹 render horarios
     async function renderHorarios() {
 
         const fecha = fechaInput.value;
@@ -115,11 +117,82 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         horariosDiv.innerHTML = "";
 
+        // 🔥 PROFESIONAL DE FRANCO
+        if(horarios.franco){
+
+            horariosDiv.innerHTML = `
+        
+                <div class="alert alert-warning w-100 text-center">
+        
+                    <i class="fa-solid fa-calendar-xmark"></i>
+        
+                    ${horarios.mensaje}
+        
+                    <div class="mt-3">
+        
+                        <button
+                            id="cambiarFecha"
+                            class="btn btn-dark btn-sm">
+        
+                            Elegir otro día
+        
+                        </button>
+        
+                    </div>
+        
+                </div>
+            `;
+        
+            // 🔥 volver al paso fecha
+            document
+                .getElementById("cambiarFecha")
+                .addEventListener("click", () => {
+        
+                    currentStep = 3;
+        
+                    updateSteps();
+        
+                });
+        
+            return;
+        }
+
+        // 🔥 SIN HORARIOS
+        if(horarios.error){
+
+            horariosDiv.innerHTML = `
+                <div class="alert alert-danger w-100 text-center">
+
+                    ${horarios.error}
+
+                </div>
+            `;
+
+            return;
+        }
+
+        // 🔥 SIN DISPONIBILIDAD
+        if(horarios.length === 0){
+
+            horariosDiv.innerHTML = `
+                <div class="alert alert-secondary w-100 text-center">
+
+                    No hay horarios disponibles
+
+                </div>
+            `;
+
+            return;
+        }
+
+        // 🔹 crear botones
         horarios.forEach(hora => {
 
             const btn = document.createElement("button");
 
-            btn.className = "btn btn-outline-primary";
+            btn.className =
+                "btn btn-outline-primary";
+
             btn.textContent = hora;
 
             btn.onclick = () => {
@@ -140,57 +213,77 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     }
 
-    fechaInput.addEventListener("change", renderHorarios);
+    fechaInput.addEventListener(
+        "change",
+        renderHorarios
+    );
 
     // 🔹 resumen
     function actualizarResumen() {
 
         resumenDiv.innerHTML = `
-            <strong>Resumen:</strong><br>
+            <strong>Resumen:</strong><br><br>
 
-            Servicios:
-            ${serviciosSeleccionados.map(s => s.nombre).join(", ") || "-"} <br>
+            <strong>Servicio:</strong>
+            ${servicioSeleccionado?.nombre || "-"} <br>
 
-            Total:
-            $${serviciosSeleccionados.reduce(
-                (acc, s) => acc + s.precio,
-                0
-            )} <br>
-            Peluquero:
+            <strong>Peluquero:</strong>
             ${peluqueroSeleccionado?.nombre || "-"} <br>
 
-            Fecha:
+            <strong>Fecha:</strong>
             ${fechaInput.value || "-"} <br>
 
-            Horario:
+            <strong>Horario:</strong>
             ${horarioSeleccionado || "-"} <br>
 
-            Cliente:
+            <strong>Cliente:</strong>
             ${clienteNombre?.value || "-"} <br>
 
-            Teléfono:
-            ${clienteTelefono?.value || "-"}
+            <strong>Teléfono:</strong>
+            ${clienteTelefono?.value || "-"} <br>
+
         `;
     }
 
-    fechaInput.addEventListener("change", actualizarResumen);
+    fechaInput.addEventListener(
+        "change",
+        actualizarResumen
+    );
 
-    clienteNombre.addEventListener("input", actualizarResumen);
-    clienteTelefono.addEventListener("input", actualizarResumen);
+    clienteNombre.addEventListener(
+        "input",
+        actualizarResumen
+    );
+
+    clienteTelefono.addEventListener(
+        "input",
+        actualizarResumen
+    );
+
 
     // 🔥 wizard
     let currentStep = 1;
 
-    const steps = document.querySelectorAll(".step");
-    const contents = document.querySelectorAll(".step-content");
+    const steps =
+        document.querySelectorAll(".step");
 
-    const nextBtn = document.getElementById("next");
-    const prevBtn = document.getElementById("prev");
+    const contents =
+        document.querySelectorAll(".step-content");
+
+    const nextBtn =
+        document.getElementById("next");
+
+    const prevBtn =
+        document.getElementById("prev");
 
     function updateSteps() {
 
         steps.forEach((step, i) => {
-            step.classList.toggle("active", i < currentStep);
+
+            step.classList.toggle(
+                "active",
+                i < currentStep
+            );
         });
 
         contents.forEach(content => {
@@ -198,8 +291,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             content.classList.remove("active");
 
             if (
-                parseInt(content.dataset.step) === currentStep
+                parseInt(content.dataset.step)
+                === currentStep
             ) {
+
                 content.classList.add("active");
             }
 
@@ -209,28 +304,40 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 🔹 validaciones
     function validarPaso() {
 
-        if (currentStep === 1 && serviciosSeleccionados.length === 0) {
+        if (
+            currentStep === 1 &&
+            !servicioSeleccionado
+        ) {
 
             alert("Elegí un servicio");
 
             return false;
         }
 
-        if (currentStep === 2 && !peluqueroSeleccionado) {
+        if (
+            currentStep === 2 &&
+            !peluqueroSeleccionado
+        ) {
 
             alert("Elegí un peluquero");
 
             return false;
         }
 
-        if (currentStep === 3 && !fechaInput.value) {
+        if (
+            currentStep === 3 &&
+            !fechaInput.value
+        ) {
 
             alert("Seleccioná una fecha");
 
             return false;
         }
 
-        if (currentStep === 4 && !horarioSeleccionado) {
+        if (
+            currentStep === 4 &&
+            !horarioSeleccionado
+        ) {
 
             alert("Elegí un horario");
 
@@ -257,206 +364,82 @@ document.addEventListener("DOMContentLoaded", async () => {
         return true;
     }
 
+    // 🔹 siguiente
     nextBtn.onclick = async () => {
 
         if (!validarPaso()) return;
-    
-        // 🔹 avanzar pasos
+
         if (currentStep < 5) {
-    
+
             currentStep++;
-    
+
             updateSteps();
-    
-        }
-    
-        // 🔹 abrir modal confirmación
-        else {
-    
-            modalResumen.innerHTML = `
 
-                <div class="ticket-grid">
+        } else {
 
-                    <!-- SERVICIOS -->
-                    <div class="ticket-card full">
+            // 🔹 guardar reserva
+            await API.reservarTurno({
 
-                        <span class="ticket-label">
-                            ✂ Servicios
-                        </span>
+                cliente: clienteNombre.value,
 
-                        <div class="services-chips">
+                telefono: clienteTelefono.value,
 
-                            ${serviciosSeleccionados.map(servicio => `
+                servicioId: servicioSeleccionado.id,
 
-                                <span class="service-chip">
-                                    ${servicio.nombre}
-                                </span>
+                servicio: servicioSeleccionado.nombre,
 
-                            `).join("")}
+                precio: servicioSeleccionado.precio,
 
-                        </div>
+                peluqueroId: peluqueroSeleccionado.id,
 
-                    </div>
+                peluquero: peluqueroSeleccionado.nombre,
 
-                    <!-- PELUQUERO -->
-                    <div class="ticket-card">
+                fecha: fechaInput.value,
 
-                        <span class="ticket-label">
-                            👤 Peluquero
-                        </span>
+                hora: horarioSeleccionado,
 
-                        <strong>
-                            ${peluqueroSeleccionado.nombre}
-                        </strong>
+                estado: "pendiente"
 
-                    </div>
+            });
 
-                    <!-- FECHA -->
-                    <div class="ticket-card">
+            // 🔹 ocultar wizard
+            document.querySelector(".reserva-card")
+                .style.display = "none";
 
-                        <span class="ticket-label">
-                            📅 Fecha
-                        </span>
+            // 🔹 éxito
+            const successScreen =
+                document.getElementById("successScreen");
 
-                        <strong>
-                            ${fechaInput.value}
-                        </strong>
+            const successResumen =
+                document.getElementById("successResumen");
 
-                    </div>
+            successResumen.innerHTML = `
 
-                    <!-- HORARIO -->
-                    <div class="ticket-card">
+                <strong>Cliente:</strong>
+                ${clienteNombre.value} <br>
 
-                        <span class="ticket-label">
-                            🕒 Horario
-                        </span>
+                <strong>Teléfono:</strong>
+                ${clienteTelefono.value} <br>
 
-                        <strong>
-                            ${horarioSeleccionado}
-                        </strong>
 
-                    </div>
+                <strong>Servicio:</strong>
+                ${servicioSeleccionado.nombre} <br>
 
-                    <!-- CLIENTE -->
-                    <div class="ticket-card">
+                <strong>Peluquero:</strong>
+                ${peluqueroSeleccionado.nombre} <br>
 
-                        <span class="ticket-label">
-                            🙍 Cliente
-                        </span>
+                <strong>Fecha:</strong>
+                ${fechaInput.value} <br>
 
-                        <strong>
-                            ${clienteNombre.value}
-                        </strong>
-
-                    </div>
-
-                    <!-- TELEFONO -->
-                    <div class="ticket-card">
-
-                        <span class="ticket-label">
-                            📞 Teléfono
-                        </span>
-
-                        <strong>
-                            ${clienteTelefono.value}
-                        </strong>
-
-                    </div>
-
-                    <!-- TOTAL -->
-                    <div class="ticket-total full">
-
-                        <span>Total</span>
-
-                        <strong>
-
-                            $${serviciosSeleccionados.reduce(
-                                (acc, s) => acc + s.precio,
-                                0
-                            )}
-
-                        </strong>
-
-                    </div>
-
-                </div>
+                <strong>Horario:</strong>
+                ${horarioSeleccionado}
 
             `;
-    
-            confirmModal.show();
+
+            successScreen.style.display = "flex";
         }
     };
-    confirmarReservaBtn.onclick = async () => {
 
-        // 🔹 guardar reserva
-        await API.reservarTurno({
-    
-            cliente: clienteNombre.value,
-    
-            telefono: clienteTelefono.value,
-    
-            servicios: serviciosSeleccionados,
-    
-            serviciosTexto: serviciosSeleccionados
-                .map(s => s.nombre)
-                .join(", "),
-    
-            precioTotal: serviciosSeleccionados
-                .reduce((acc, s) => acc + s.precio, 0),
-    
-            peluqueroId: peluqueroSeleccionado.id,
-    
-            peluquero: peluqueroSeleccionado.nombre,
-    
-            fecha: fechaInput.value,
-    
-            hora: horarioSeleccionado,
-    
-            estado: "confirmado"
-    
-        });
-    
-        // 🔹 cerrar modal
-        confirmModal.hide();
-    
-        // 🔹 ocultar wizard
-        document.querySelector(".reserva-card")
-            .style.display = "none";
-    
-        // 🔹 mostrar éxito
-        const successScreen =
-            document.getElementById("successScreen");
-    
-        const successResumen =
-            document.getElementById("successResumen");
-    
-        successResumen.innerHTML = `
-    
-            <strong>Cliente:</strong>
-            ${clienteNombre.value} <br>
-    
-            <strong>Servicios:</strong>
-            ${serviciosSeleccionados
-                .map(s => s.nombre)
-                .join(", ")} <br>
-    
-            <strong>Total:</strong>
-            $${serviciosSeleccionados
-                .reduce((acc, s) => acc + s.precio, 0)} <br>
-    
-            <strong>Peluquero:</strong>
-            ${peluqueroSeleccionado.nombre} <br>
-    
-            <strong>Fecha:</strong>
-            ${fechaInput.value} <br>
-    
-            <strong>Horario:</strong>
-            ${horarioSeleccionado}
-    
-        `;
-    
-        successScreen.style.display = "flex";
-    };
     // 🔹 atrás
     prevBtn.onclick = () => {
 

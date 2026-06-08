@@ -139,7 +139,334 @@
 .btn-delete:hover{
     background: #b91c1c;
 }
+/* =========================
+   MODAL NUEVA RESERVA
+========================= */
 
+.nueva-reserva-modal {
+
+    background: #111827 !important;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 24px;
+    overflow: hidden;
+
+}
+
+/* HEADER */
+
+.nueva-reserva-modal .modal-header {
+
+    padding: 1.5rem 1.8rem;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1f2937,
+            #111827
+        );
+
+    border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.modal-header-content {
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.modal-icon {
+
+    width: 58px;
+    height: 58px;
+
+    border-radius: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #3b82f6,
+            #2563eb
+        );
+
+    font-size: 1.3rem;
+}
+
+.modal-title {
+    color: white !important;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.modal-subtitle {
+
+    color: #9ca3af;
+    font-size: .92rem;
+}
+
+/* BODY */
+
+.nueva-reserva-modal .modal-body {
+
+    padding: 1.8rem;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+/* SECCIONES */
+
+.modal-section {
+
+    margin-bottom: 1.8rem;
+}
+
+.section-title {
+
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+
+    font-size: .95rem;
+    font-weight: 700;
+
+    margin-bottom: 1rem;
+
+    color: #f3f4f6;
+}
+
+/* INPUTS */
+
+.custom-input {
+
+    background: #1f2937;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,.06);
+}
+
+.custom-input .input-group-text {
+
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+}
+
+.custom-input .form-control,
+.custom-input .form-select {
+
+    background: transparent;
+    border: none;
+    color: #fff;
+    box-shadow: none;
+}
+
+.custom-input .form-control::placeholder {
+
+    color: #6b7280;
+}
+
+.form-label {
+
+    color: #d1d5db;
+    font-size: .88rem;
+    margin-bottom: .5rem;
+}
+
+.modern-select {
+
+    background: #1f2937 !important;
+    border: 1px solid rgba(255,255,255,.06) !important;
+    border-radius: 14px !important;
+    color: #fff !important;
+    padding: .8rem 1rem;
+}
+
+/* RESUMEN */
+
+.resumen-card {
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    padding: 1rem 1.2rem;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(59,130,246,.15),
+            rgba(37,99,235,.08)
+        );
+
+    border: 1px solid rgba(59,130,246,.2);
+}
+
+.resumen-icon {
+
+    width: 50px;
+    height: 50px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(59,130,246,.2);
+
+    font-size: 1.1rem;
+}
+
+/* FOOTER */
+
+.nueva-reserva-modal .modal-footer {
+
+    padding: 1.2rem 1.8rem;
+
+    background: #0f172a;
+
+    border-top: 1px solid rgba(255,255,255,.06);
+}
+.h6-modalreserva{
+    color: white !important;
+}
+.p-modalreserva{
+    color: white !important;
+}
+/* BOTONES */
+
+.btn-cancel {
+
+    background: #1f2937 !important;
+    border: none !important;
+    color: #fff !important;
+
+    padding: .8rem 1.2rem;
+    border-radius: 12px;
+}
+
+.btn-save {
+
+    background:
+        linear-gradient(
+            135deg,
+            #3b82f6,
+            #2563eb
+        ) !important;
+
+    border: none !important;
+    color: #fff !important;
+
+    font-weight: 600;
+
+    padding: .8rem 1.4rem;
+
+    border-radius: 12px;
+
+    transition: .2s ease;
+}
+
+.btn-save:hover {
+
+    transform: translateY(-2px);
+}
+/* =========================
+   FIX DARK MODE MODAL
+========================= */
+
+/* FONDO REAL DEL MODAL */
+
+.nueva-reserva-modal .modal-content {
+
+    background: #111827 !important;
+    color: #fff;
+}
+
+/* INPUTS */
+
+.nueva-reserva-modal input,
+.nueva-reserva-modal select,
+.nueva-reserva-modal textarea {
+
+    background-color: #1f2937 !important;
+    color: #fff !important;
+
+    border: 1px solid rgba(255,255,255,.08) !important;
+}
+
+/* PLACEHOLDERS */
+
+.nueva-reserva-modal input::placeholder,
+.nueva-reserva-modal textarea::placeholder {
+
+    color: #6b7280 !important;
+}
+
+/* SELECT OPTIONS */
+
+.nueva-reserva-modal option {
+
+    background: #111827;
+    color: #fff;
+}
+
+/* FOCUS */
+
+.nueva-reserva-modal input:focus,
+.nueva-reserva-modal select:focus,
+.nueva-reserva-modal textarea:focus {
+
+    background-color: #1f2937 !important;
+
+    color: #fff !important;
+
+    border-color: #3b82f6 !important;
+
+    box-shadow:
+        0 0 0 3px rgba(59,130,246,.15) !important;
+}
+
+/* INPUT GROUP FIX */
+
+.nueva-reserva-modal .input-group-text {
+
+    background: #1f2937 !important;
+    color: #9ca3af !important;
+
+    border: 1px solid rgba(255,255,255,.08) !important;
+}
+
+/* SACAR BORDE DOBLE */
+
+.custom-input .form-control,
+.custom-input .form-select {
+
+    border: none !important;
+}
+
+/* BOTON CERRAR */
+
+.nueva-reserva-modal .btn-close {
+
+    filter: invert(1);
+}
+
+/* AUTOFILL CHROME */
+
+.nueva-reserva-modal input:-webkit-autofill {
+
+    -webkit-box-shadow:
+        0 0 0 1000px #1f2937 inset !important;
+
+    -webkit-text-fill-color:
+        #fff !important;
+}
 /* =========================
    RESPONSIVE
 ========================= */

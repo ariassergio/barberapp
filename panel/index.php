@@ -17,24 +17,23 @@ $peluqueros = [
     ]
 ];
 
-// 🔹 login
+// panel/index.php — validación real
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $id  = intval($_POST["peluquero"] ?? 0);
+    $pin = $_POST["pin"] ?? '';
 
-    $peluqueroId = $_POST["peluquero"] ?? null;
+    $stmt = $conn->prepare("SELECT id_profesional, nombre FROM profesionales WHERE id_profesional = ? AND pin = ? AND activo = 1");
+    $stmt->bind_param("is", $id, $pin);
+    $stmt->execute();
+    $prof = $stmt->get_result()->fetch_assoc();
 
-    foreach ($peluqueros as $p) {
-
-        if ($p["id"] == $peluqueroId) {
-
-            $_SESSION["peluquero_id"] = $p["id"];
-            $_SESSION["peluquero_nombre"] = $p["nombre"];
-
-            header("Location: dashboard.php");
-            exit;
-        }
+    if ($prof) {
+        $_SESSION["peluquero_id"]     = $prof["id_profesional"];
+        $_SESSION["peluquero_nombre"] = $prof["nombre"];
+        header("Location: dashboard.php");
+        exit;
     }
-
-    $error = "Peluquero inválido";
+    $error = "PIN incorrecto";
 }
 ?>
 

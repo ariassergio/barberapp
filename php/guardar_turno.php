@@ -1,6 +1,7 @@
 <?php
 
 header("Content-Type: application/json");
+require_once __DIR__ . "/../admin/config/db.php";
 
 $conexion = new mysqli(
     "localhost",
@@ -37,12 +38,15 @@ $hora = $data["hora"];
 // 🔹 datetime
 $fecha_inicio = $fecha . " " . $hora . ":00";
 
-// 🔹 fin
-$fecha_fin = date(
-    "Y-m-d H:i:s",
-    strtotime($fecha_inicio . " +1 hour")
-);
+// ✅ CORRECTO — calculá la duración real del servicio
+$id_servicio = intval($data["servicioId"]);
+$stmtSrv = $conn->prepare("SELECT duracion_minutos FROM servicios WHERE id_servicio = ?");
+$stmtSrv->bind_param("i", $id_servicio);
+$stmtSrv->execute();
+$srv = $stmtSrv->get_result()->fetch_assoc();
 
+$duracion = ($srv && $srv['duracion_minutos'] > 0) ? $srv['duracion_minutos'] : 60;
+$fecha_fin = date("Y-m-d H:i:s", strtotime($fecha_inicio . " +{$duracion} minutes"));
 // 🔹 insert
 $sql = "INSERT INTO turnos (
 

@@ -4,10 +4,19 @@ header("Content-Type: application/json");
 
 include("../admin/config/db.php");
 
-$fecha = $_GET["fecha"];
+if (empty($_GET['fecha']) || empty($_GET['peluquero'])) {
+    echo json_encode(["error" => "Parámetros requeridos"]);
+    exit;
+}
 
-$idProfesional = $_GET["peluquero"];
+$fecha        = $_GET['fecha'];
+$idProfesional = intval($_GET['peluquero']);
 
+// Validar que la fecha sea válida
+if (!DateTime::createFromFormat('Y-m-d', $fecha)) {
+    echo json_encode(["error" => "Fecha inválida"]);
+    exit;
+}
 
 // =============================
 // OBTENER DIA DE LA SEMANA

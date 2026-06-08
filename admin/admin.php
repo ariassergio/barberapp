@@ -1,6 +1,26 @@
 <?php
-// Más adelante acá irá la validación de sesión
-// require_once 'includes/auth.php';
+require_once 'includes/auth.php';
+require_once 'config/db.php';
+
+$hoy = date('Y-m-d');
+
+// Turnos hoy
+$r = mysqli_query($conn, "SELECT COUNT(*) as total FROM turnos WHERE DATE(fecha_inicio) = '$hoy'");
+$turnosHoy = mysqli_fetch_assoc($r)['total'];
+
+// Pendientes
+$r = mysqli_query($conn, "SELECT COUNT(*) as total FROM turnos WHERE DATE(fecha_inicio) = '$hoy' AND estado = 'pendiente'");
+$pendientes = mysqli_fetch_assoc($r)['total'];
+
+// Barberos activos
+$r = mysqli_query($conn, "SELECT COUNT(*) as total FROM profesionales WHERE activo = 1");
+$barberosActivos = mysqli_fetch_assoc($r)['total'];
+
+// Ingresos del día (turnos finalizados)
+$r = mysqli_query($conn, "SELECT COALESCE(SUM(s.precio), 0) as total
+                           FROM turnos t JOIN servicios s ON t.id_servicio = s.id_servicio
+                           WHERE DATE(t.fecha_inicio) = '$hoy' AND t.estado = 'finalizado'");
+$ingresosHoy = mysqli_fetch_assoc($r)['total'];
 ?>
 
 <!DOCTYPE html>
@@ -46,25 +66,25 @@
 
                     <div class="admin-card">
                         <i class="fa-solid fa-calendar-check"></i>
-                        <h3>24</h3>
+                        <h3><?= $turnosHoy ?></h3>
                         <p>Turnos Hoy</p>
                     </div>
 
                     <div class="admin-card">
                         <i class="fa-solid fa-clock"></i>
-                        <h3>8</h3>
+                        <h3><?= $pendientes ?></h3>
                         <p>Pendientes</p>
                     </div>
 
                     <div class="admin-card">
                         <i class="fa-solid fa-scissors"></i>
-                        <h3>5</h3>
+                        <h3><?= $barberosActivos ?></h3>
                         <p>Barberos Activos</p>
                     </div>
 
                     <div class="admin-card">
                         <i class="fa-solid fa-dollar-sign"></i>
-                        <h3>$125.000</h3>
+                        <h3>$<?= number_format($ingresosHoy, 0, ',', '.') ?></h3>
                         <p>Ingresos Hoy</p>
                     </div>
 

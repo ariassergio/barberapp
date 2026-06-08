@@ -1,8 +1,4 @@
 <?php
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
 require_once '../config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -10,25 +6,18 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-$nombre = $_POST['nombre'];
-$precio = $_POST['precio'];
-$duracion = $_POST['duracion'];
+$nombre   = trim($_POST['nombre'] ?? '');
+$precio   = floatval($_POST['precio'] ?? 0);
+$duracion = intval($_POST['duracion'] ?? 0);
 
-$sql = "INSERT INTO servicios (
-            nombre,
-            precio,
-            duracion_minutos
-        ) VALUES (
-            '$nombre',
-            '$precio',
-            '$duracion'
-        )";
-
-$query = mysqli_query($conn, $sql);
-
-if (!$query) {
-    die(mysqli_error($conn));
+if (empty($nombre) || $precio <= 0 || $duracion <= 0) {
+    header("Location: ../servicios.php?error=datos_invalidos");
+    exit;
 }
 
-header("Location: ../servicios.php");
+$stmt = $conn->prepare("INSERT INTO servicios (nombre, precio, duracion_minutos) VALUES (?, ?, ?)");
+$stmt->bind_param("sdi", $nombre, $precio, $duracion);
+$stmt->execute();
+
+header("Location: ../servicios.php?success=1");
 exit;

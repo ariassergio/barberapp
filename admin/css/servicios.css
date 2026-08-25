@@ -1,90 +1,276 @@
-/* =========================
-   SERVICIOS
-========================= */
-
-.servicios-grid{
+/* ==========================================================================
+   CONFIGURACIÓN GENERAL Y CONTENEDORES
+   ========================================================================== */
+   .cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 25px;
+    margin-top: 20px;
 }
 
-.servicio-card{
+/* Botón Nuevo Servicio (Estilo Premium) */
+.new-servicio-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.new-servicio-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   TARJETAS DE SERVICIO (ADMIN CARD)
+   ========================================================================== */
+.admin-card {
     background: #111827;
     border: 1px solid #1e293b;
-    border-radius: 18px;
+    border-radius: 20px;
     padding: 25px;
-    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    transition: all 0.3s ease-in-out;
 }
 
-.servicio-card:hover{
+.admin-card:hover {
     transform: translateY(-5px);
-    border-color: #334155;
+    border-color: #3b82f6;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.1);
 }
 
-.servicio-icon{
-    width: 60px;
-    height: 60px;
-    border-radius: 15px;
-    background: rgba(37,99,235,0.15);
+/* Efecto visual para servicios pausados/deshabilitados */
+.admin-card.servicio-deshabilitado {
+    opacity: 0.55;
+    border-color: rgba(220, 53, 69, 0.2);
+}
+
+.admin-card.servicio-deshabilitado:hover {
+    box-shadow: 0 10px 25px rgba(220, 53, 69, 0.05);
+    border-color: rgba(220, 53, 69, 0.4);
+}
+
+/* Contenedor del ícono de la tijera */
+.card-service-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
-.servicio-icon i{
+.card-service-icon i {
     color: #60a5fa;
-    font-size: 25px;
+    font-size: 20px;
 }
 
-.servicio-card h3{
-    color: white;
-    margin-bottom: 10px;
+/* Tipografías de la Tarjeta */
+.admin-card h3 {
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    line-height: 1.4;
 }
 
-.servicio-card p{
-    color: #94a3b8;
-    margin-bottom: 20px;
-}
-
-.servicio-footer{
+.service-meta-data {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    margin-top: auto;
+    padding-bottom: 5px;
 }
 
-.servicio-price{
+.service-price {
     color: #22c55e;
-    font-size: 22px;
-    font-weight: bold;
-}
-.duracion-container{
-    display: flex;
-    gap: 10px;
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin: 0;
 }
 
-.duracion-container input{
-    flex: 1;
+.service-duration {
+    color: #94a3b8;
+    font-size: 0.88rem;
+    font-weight: 500;
 }
 
-.duracion-container select{
-    width: 140px;
-}
-.estado{
-    margin-top: 10px;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 13px;
+/* ==========================================================================
+   BOTONES DE ACCIÓN DENTRO DE LA TARJETA
+   ========================================================================== */
+.btn-card-action {
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.88rem;
     font-weight: 600;
-    display: inline-block;
+    cursor: pointer;
+    transition: 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.estado.activo{
-    background: rgba(25, 135, 84, 0.15);
-    color: #198754;
+/* Botón Editar */
+.btn-edit-serv {
+    background: #1f2937;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.estado.inactivo{
-    background: rgba(220, 53, 69, 0.15);
-    color: #dc3545;
+.btn-edit-serv:hover {
+    background: #334155;
+    color: #ffffff;
+}
+
+/* Botones Habilitar / Deshabilitar */
+.btn-toggle-disable {
+    background: rgba(220, 53, 69, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(220, 53, 69, 0.15);
+}
+
+.btn-toggle-disable:hover {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-toggle-enable {
+    background: rgba(34, 197, 94, 0.1);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.15);
+}
+
+.btn-toggle-enable:hover {
+    background: #16a34a;
+    color: white;
+}
+
+/* ==========================================================================
+   ESTILOS PREMIUM INTEGRADOS PARA MODALES (ANTI-TEXTO BLANCO)
+   ========================================================================== */
+.premium-modal {
+    background-color: #111827 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 24px !important;
+    overflow: hidden;
+    color: #ffffff;
+}
+
+.premium-modal .modal-header {
+    padding: 1.5rem 1.8rem;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.premium-modal .modal-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+}
+
+.premium-modal .modal-icon.create-icon { background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.2); }
+.premium-modal .modal-icon.edit-icon { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+
+.premium-modal .modal-title { color: #fff !important; font-weight: 700; }
+.premium-modal .modal-subtitle { color: #9ca3af; font-size: 0.85rem; }
+
+/* Inputs Modernos Estilo Grid Oscuro */
+.custom-input {
+    background: #1f2937 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+.custom-input .input-group-text {
+    background: transparent !important;
+    border: none !important;
+    color: #9ca3af !important;
+    padding-left: 15px;
+}
+
+.custom-input .form-control {
+    background: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    padding: 10px 12px;
+}
+
+.custom-input .form-control::placeholder {
+    color: #6b7280 !important;
+}
+
+.modern-select {
+    background-color: #1f2937 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+}
+
+/* FIX DESPLEGABLES (Opciones del Select invisibles) */
+.modern-select option {
+    background-color: #111827 !important;
+    color: #ffffff !important;
+}
+
+.form-label {
+    color: #cbd5e1;
+    font-size: 0.88rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+/* Footer y Botones del Modal */
+.premium-modal .modal-footer {
+    background: #0f172a;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 1.2rem 1.8rem;
+}
+
+.premium-modal .btn-cancel {
+    background: #1f2937 !important;
+    color: #fff !important;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.premium-modal .btn-cancel:hover {
+    background: #334155 !important;
+}
+
+.premium-modal .btn-save {
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+    color: #fff !important;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.premium-modal .btn-save:hover {
+    transform: translateY(-2px);
+}
+.text-blanco{
+    color: white !important;
 }

@@ -10,23 +10,21 @@ $hora_inicio = $_POST['hora_inicio'];
 
 $hora_fin = $_POST['hora_fin'];
 
-$sql = "INSERT INTO horarios_profesionales(
+$check = "SELECT id_horario FROM horarios_profesionales WHERE id_profesional = '$id_profesional'";
+$res = mysqli_query($conn, $check);
 
-            id_profesional,
-            hora_inicio,
-            hora_fin,
-            dia_franco
-
-        )
-
-        VALUES(
-
-            '$id_profesional',
-            '$hora_inicio',
-            '$hora_fin',
-            '$dia_franco'
-
-        )";
+if (mysqli_num_rows($res) > 0) {
+    // Update
+    $sql = "UPDATE horarios_profesionales SET 
+                hora_inicio = '$hora_inicio',
+                hora_fin = '$hora_fin',
+                dia_franco = '$dia_franco'
+            WHERE id_profesional = '$id_profesional'";
+} else {
+    // Insert
+    $sql = "INSERT INTO horarios_profesionales(id_profesional, hora_inicio, hora_fin, dia_franco)
+            VALUES('$id_profesional', '$hora_inicio', '$hora_fin', '$dia_franco')";
+}
 
 mysqli_query($conn, $sql);
 

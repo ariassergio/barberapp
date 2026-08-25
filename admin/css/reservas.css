@@ -1,8 +1,24 @@
-/* =========================
-   HEADER
-========================= */
+/* ==========================================================================
+   VARIABLES Y CONFIGURACIÓN GENERAL
+   ========================================================================== */
+   :root {
+    --bg-main: #111827;
+    --bg-card: #1f2937;
+    --bg-footer: #0f172a;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --accent-blue: #2563eb;
+    --accent-blue-hover: #1d4ed8;
+    --accent-view: #3b82f6;
+    --accent-edit: #f59e0b;
+    --text-muted: #94a3b8;
+    --border-radius-lg: 16px;
+    --transition-smooth: all 0.25s ease-in-out;
+}
 
-.reservas-header{
+/* ==========================================================================
+   HEADER Y FILTROS
+   ========================================================================== */
+.reservas-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -11,17 +27,73 @@
     flex-wrap: wrap;
 }
 
-.reservas-subtitle{
-    color: #94a3b8;
+.reservas-subtitle {
+    color: var(--text-muted);
     margin-top: -10px;
 }
 
-/* =========================
-   BOTON
-========================= */
+.reservas-filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
 
-.new-reserva-btn{
-    background: #2563eb;
+.reservas-search,
+.reservas-select {
+    background: var(--bg-main);
+    border: 1px solid #1e293b;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 12px;
+    outline: none;
+}
+
+.reservas-search {
+    width: 300px;
+}
+
+.reservas-search::placeholder {
+    color: var(--text-muted);
+}
+
+.reservas-search:focus,
+.reservas-select:focus {
+    border-color: var(--accent-blue);
+}
+
+/* ==========================================================================
+   CLIENTE Y TABLA
+   ========================================================================== */
+.cliente-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cliente-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.cliente-info h4 {
+    color: white;
+    font-size: 15px;
+    margin: 0;
+}
+
+.cliente-info span {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+/* ==========================================================================
+   BOTONES Y ACCIONES GENERALES
+   ========================================================================== */
+.new-reserva-btn {
+    background: var(--accent-blue);
     color: white;
     border: none;
     padding: 14px 22px;
@@ -31,82 +103,16 @@
     transition: 0.3s;
 }
 
-.new-reserva-btn:hover{
-    background: #1d4ed8;
+.new-reserva-btn:hover {
+    background: var(--accent-blue-hover);
 }
 
-/* =========================
-   FILTROS
-========================= */
-
-.reservas-filters{
-    display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
-}
-
-.reservas-search,
-.reservas-select{
-    background: #111827;
-    border: 1px solid #1e293b;
-    color: white;
-    padding: 12px 15px;
-    border-radius: 12px;
-    outline: none;
-}
-
-.reservas-search{
-    width: 300px;
-}
-
-.reservas-search::placeholder{
-    color: #94a3b8;
-}
-
-.reservas-search:focus,
-.reservas-select:focus{
-    border-color: #2563eb;
-}
-
-/* =========================
-   CLIENTE
-========================= */
-
-.cliente-info{
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.cliente-avatar{
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-
-.cliente-info h4{
-    color: white;
-    font-size: 15px;
-    margin: 0;
-}
-
-.cliente-info span{
-    color: #94a3b8;
-    font-size: 13px;
-}
-
-/* =========================
-   ACCIONES
-========================= */
-
-.reservas-actions{
+.reservas-actions {
     display: flex;
     gap: 10px;
 }
 
-.reserva-btn{
+.reserva-btn {
     width: 38px;
     height: 38px;
     border: none;
@@ -116,85 +122,61 @@
     transition: 0.3s;
 }
 
-.btn-view{
-    background: #16a34a;
-}
+.btn-view { background: #16a34a; }
+.btn-view:hover { background: #15803d; }
 
-.btn-view:hover{
-    background: #15803d;
-}
+.btn-edit { background: var(--accent-blue); }
+.btn-edit:hover { background: var(--accent-blue-hover); }
 
-.btn-edit{
-    background: #2563eb;
-}
+.btn-delete { background: #dc2626; }
+.btn-delete:hover { background: #b91c1c; }
 
-.btn-edit:hover{
-    background: #1d4ed8;
-}
-
-.btn-delete{
-    background: #dc2626;
-}
-
-.btn-delete:hover{
-    background: #b91c1c;
-}
-/* =========================
-   MODAL NUEVA RESERVA
-========================= */
-
-.nueva-reserva-modal {
-
-    background: #111827 !important;
-    border: 1px solid rgba(255,255,255,.08);
-    border-radius: 24px;
+/* ==========================================================================
+   ESTILOS UNIFICADOS PARA MODALES (NUEVO, VER Y EDITAR)
+   ========================================================================== */
+/* Base estructural del Modal (Fondo Oscuro Premium) */
+.premium-modal,
+.nueva-reserva-modal .modal-content {
+    background-color: var(--bg-main) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 24px !important;
     overflow: hidden;
-
+    color: #fff;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
-/* HEADER */
-
+/* Cabeceras del Modal */
+.premium-modal .modal-header,
 .nueva-reserva-modal .modal-header {
-
     padding: 1.5rem 1.8rem;
-
-    background:
-        linear-gradient(
-            135deg,
-            #1f2937,
-            #111827
-        );
-
-    border-bottom: 1px solid rgba(255,255,255,.06);
+    background: linear-gradient(135deg, #1f2937, #111827);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    color: #ffffff;
 }
 
 .modal-header-content {
-
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
+/* Contenedores de Íconos en Cabeceras */
+.premium-modal .modal-icon,
 .modal-icon {
-
     width: 58px;
     height: 58px;
-
     border-radius: 18px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #2563eb
-        );
-
     font-size: 1.3rem;
+    color: #fff;
 }
+
+/* Variaciones de íconos según modal */
+.nueva-reserva-modal .modal-icon { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+.premium-modal .modal-icon.view-icon { background: rgba(59, 130, 246, 0.2); color: var(--accent-view); border: 1px solid rgba(59, 130, 246, 0.3); }
+.premium-modal .modal-icon.edit-icon { background: rgba(245, 158, 11, 0.2); color: var(--accent-edit); border: 1px solid rgba(245, 158, 11, 0.3); }
 
 .modal-title {
     color: white !important;
@@ -203,282 +185,309 @@
 }
 
 .modal-subtitle {
-
     color: #9ca3af;
     font-size: .92rem;
 }
 
-/* BODY */
-
+/* Cuerpo del Modal */
+.premium-modal .modal-body,
 .nueva-reserva-modal .modal-body {
-
     padding: 1.8rem;
     max-height: 70vh;
     overflow-y: auto;
 }
 
-/* SECCIONES */
-
 .modal-section {
-
     margin-bottom: 1.8rem;
 }
 
 .section-title {
-
     display: flex;
     align-items: center;
     gap: .6rem;
-
     font-size: .95rem;
     font-weight: 700;
-
     margin-bottom: 1rem;
-
     color: #f3f4f6;
 }
 
-/* INPUTS */
-
+/* ==========================================================================
+   INPUTS Y FORMULARIOS (MODO OSCURO)
+   ========================================================================== */
 .custom-input {
-
-    background: #1f2937;
+    background: var(--bg-card);
     border-radius: 14px;
     overflow: hidden;
-    border: 1px solid rgba(255,255,255,.06);
+    border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.custom-input .input-group-text {
-
-    background: transparent;
-    border: none;
-    color: #9ca3af;
+.nueva-reserva-modal input,
+.nueva-reserva-modal select,
+.nueva-reserva-modal textarea,
+.modern-select {
+    background-color: var(--bg-card) !important;
+    color: #fff !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 14px !important;
+    padding: .8rem 1rem;
 }
 
 .custom-input .form-control,
 .custom-input .form-select {
-
-    background: transparent;
-    border: none;
+    border: none !important;
+    background: transparent !important;
     color: #fff;
     box-shadow: none;
 }
 
+.nueva-reserva-modal input::placeholder,
+.nueva-reserva-modal textarea::placeholder,
 .custom-input .form-control::placeholder {
-
-    color: #6b7280;
+    color: #6b7280 !important;
 }
 
 .form-label {
-
     color: #d1d5db;
     font-size: .88rem;
     margin-bottom: .5rem;
 }
 
-.modern-select {
-
-    background: #1f2937 !important;
-    border: 1px solid rgba(255,255,255,.06) !important;
-    border-radius: 14px !important;
-    color: #fff !important;
-    padding: .8rem 1rem;
+.nueva-reserva-modal option {
+    background: var(--bg-main);
+    color: #fff;
 }
 
-/* RESUMEN */
+/* Focus States */
+.nueva-reserva-modal input:focus,
+.nueva-reserva-modal select:focus,
+.nueva-reserva-modal textarea:focus {
+    background-color: var(--bg-card) !important;
+    border-color: #3b82f6 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, .15) !important;
+}
 
-.resumen-card {
+.nueva-reserva-modal .input-group-text {
+    background: var(--bg-card) !important;
+    color: #9ca3af !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
 
+.status-selector {
+    font-size: 1.05rem !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1rem !important;
+    border: 2px solid #e4e4e7 !important;
+    border-radius: 10px !important;
+}
+
+.status-selector:focus {
+    border-color: var(--accent-edit) !important;
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.15) !important;
+}
+
+/* Chrome Autofill */
+.nueva-reserva-modal input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--bg-card) inset !important;
+    -webkit-text-fill-color: #fff !important;
+}
+
+.nueva-reserva-modal .btn-close {
+    filter: invert(1);
+}
+
+/* ==========================================================================
+   TARJETAS DE DETALLE (MODAL VER)
+   ========================================================================== */
+.info-display-card.primary-card {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%) !important;
+    border-left: 5px solid var(--accent-view) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 1.25rem;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     gap: 1rem;
+}
 
+.card-icon-aside {
+    font-size: 2rem;
+    color: var(--text-muted);
+}
+
+.card-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted) !important;
+    display: block;
+}
+
+.card-value-highlight {
+    color: #0f172a;
+    font-weight: 700;
+    color: #ffffff !important;
+}
+
+.card-subvalue {
+    font-size: 0.9rem;
+    color: #cbd5e1 !important;
+}
+
+/* Bloques secundarios del Grid */
+.info-display-group {
+    background-color: var(--bg-card) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    height: 100%;
+}
+
+.group-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #9ca3af !important;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.group-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #ffffff !important;
+    margin: 0;
+}
+
+/* Tarjeta Resumen Dinámica */
+.resumen-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     padding: 1rem 1.2rem;
-
     border-radius: 18px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(59,130,246,.15),
-            rgba(37,99,235,.08)
-        );
-
-    border: 1px solid rgba(59,130,246,.2);
+    background: linear-gradient(135deg, rgba(59, 130, 246, .15), rgba(37, 99, 235, .08));
+    border: 1px solid rgba(59, 130, 246, .2);
 }
 
 .resumen-icon {
-
     width: 50px;
     height: 50px;
-
     border-radius: 14px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    background: rgba(59,130,246,.2);
-
+    background: rgba(59, 130, 246, .2);
     font-size: 1.1rem;
 }
 
-/* FOOTER */
+/* ==========================================================================
+   BADGES DE ESTADO (CONEXIÓN CON JS)
+   ========================================================================== */
+.badge-status-modern {
+    display: inline-block;
+    padding: 0.4rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    border-radius: 50px;
+    letter-spacing: 0.5px;
+}
 
+/* Colores dinámicos asignados mediante JS */
+.badge-status-modern.pendiente { background-color: #fef3c7; color: #d97706; }
+.badge-status-modern.confirmado { background-color: #dcfce7; color: #15803d; }
+.badge-status-modern.cancelado { background-color: #fee2e2; color: #b91c1c; }
+.badge-status-modern.finalizado { background-color: #dcfce7; color: #16a34a; }
+
+/* ==========================================================================
+   PIE DE LOS MODALES (FOOTER)
+   ========================================================================== */
+.premium-modal .modal-footer,
 .nueva-reserva-modal .modal-footer {
-
     padding: 1.2rem 1.8rem;
-
-    background: #0f172a;
-
-    border-top: 1px solid rgba(255,255,255,.06);
+    background: var(--bg-footer) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
 }
-.h6-modalreserva{
-    color: white !important;
-}
-.p-modalreserva{
-    color: white !important;
-}
-/* BOTONES */
 
+.premium-modal .btn-cancel,
 .btn-cancel {
-
     background: #1f2937 !important;
     border: none !important;
     color: #fff !important;
-
     padding: .8rem 1.2rem;
     border-radius: 12px;
+    font-weight: 600;
+    transition: var(--transition-smooth);
+}
+
+.premium-modal .btn-cancel:hover,
+.btn-cancel:hover {
+    background-color: #cbd5e1;
 }
 
 .btn-save {
-
-    background:
-        linear-gradient(
-            135deg,
-            #3b82f6,
-            #2563eb
-        ) !important;
-
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
     border: none !important;
     color: #fff !important;
-
     font-weight: 600;
-
     padding: .8rem 1.4rem;
-
     border-radius: 12px;
-
     transition: .2s ease;
 }
 
 .btn-save:hover {
-
     transform: translateY(-2px);
 }
-/* =========================
-   FIX DARK MODE MODAL
-========================= */
+/* ==========================================================================
+   SOLUCIÓN DEFINITIVA: FORZAR MODO OSCURO EN TODOS LOS MODALES Y DROPDOWNS
+   ========================================================================== */
 
-/* FONDO REAL DEL MODAL */
-
-.nueva-reserva-modal .modal-content {
-
-    background: #111827 !important;
-    color: #fff;
+/* 1. Forzar que CUALQUIER modal tenga fondo oscuro y letras blancas */
+.modal-content {
+    background-color: #111827 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
 
-/* INPUTS */
-
-.nueva-reserva-modal input,
-.nueva-reserva-modal select,
-.nueva-reserva-modal textarea {
-
+/* 2. Forzar que todos los inputs, textareas y selects de los modales sean oscuros */
+.modal-body input,
+.modal-body select,
+.modal-body textarea,
+.modal-body .form-control,
+.modal-body .form-select {
     background-color: #1f2937 !important;
-    color: #fff !important;
-
-    border: 1px solid rgba(255,255,255,.08) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-/* PLACEHOLDERS */
-
-.nueva-reserva-modal input::placeholder,
-.nueva-reserva-modal textarea::placeholder {
-
-    color: #6b7280 !important;
+/* 3. FIX CRÍTICO: Forzar que las opciones de los menús desplegables (select) tengan fondo oscuro */
+.modal-body select option {
+    background-color: #111827 !important; /* Fondo del menú */
+    color: #ffffff !important;           /* Texto del menú */
 }
 
-/* SELECT OPTIONS */
-
-.nueva-reserva-modal option {
-
-    background: #111827;
-    color: #fff;
-}
-
-/* FOCUS */
-
-.nueva-reserva-modal input:focus,
-.nueva-reserva-modal select:focus,
-.nueva-reserva-modal textarea:focus {
-
+/* 4. Asegurar el color cuando el usuario hace foco (clic) en un input/select */
+.modal-body .form-control:focus,
+.modal-body .form-select:focus,
+.modal-body input:focus,
+.modal-body select:focus {
     background-color: #1f2937 !important;
-
-    color: #fff !important;
-
+    color: #ffffff !important;
     border-color: #3b82f6 !important;
-
-    box-shadow:
-        0 0 0 3px rgba(59,130,246,.15) !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25) !important;
 }
 
-/* INPUT GROUP FIX */
-
-.nueva-reserva-modal .input-group-text {
-
-    background: #1f2937 !important;
-    color: #9ca3af !important;
-
-    border: 1px solid rgba(255,255,255,.08) !important;
+/* 5. Asegurar las etiquetas de texto (labels) dentro de los modales */
+.modal-body label,
+.modal-body .form-label {
+    color: #d1d5db !important;
 }
-
-/* SACAR BORDE DOBLE */
-
-.custom-input .form-control,
-.custom-input .form-select {
-
-    border: none !important;
-}
-
-/* BOTON CERRAR */
-
-.nueva-reserva-modal .btn-close {
-
-    filter: invert(1);
-}
-
-/* AUTOFILL CHROME */
-
-.nueva-reserva-modal input:-webkit-autofill {
-
-    -webkit-box-shadow:
-        0 0 0 1000px #1f2937 inset !important;
-
-    -webkit-text-fill-color:
-        #fff !important;
-}
-/* =========================
+/* ==========================================================================
    RESPONSIVE
-========================= */
-
-@media(max-width: 768px){
-
-    .reservas-search{
+   ========================================================================== */
+@media(max-width: 768px) {
+    .reservas-search,
+    .reservas-select {
         width: 100%;
     }
-
-    .reservas-select{
-        width: 100%;
-    }
-
 }

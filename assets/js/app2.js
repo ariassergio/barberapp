@@ -15,29 +15,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     let peluqueroSeleccionado = null;
     let horarioSeleccionado = null;
 
-    // 🔹 Inicializar componentes del Modal de Bootstrap 5
-    const modalConfirmacion = new bootstrap.Modal(document.getElementById('modalConfirmacion'));
-    const btnConfirmarFinal = document.getElementById('btnConfirmarFinal');
-    const resumenModal = document.getElementById('resumenModal');
-
-    // 🔹 Cargar servicios
+    // 🔹 cargar servicios
     const servicios = await API.getServicios();
+
     console.log(servicios);
 
     servicios.forEach(s => {
+
         const col = document.createElement("div");
+
         col.className = "col-6";
+
         col.innerHTML = `
             <div class="servicio-card">
                 <h6>${s.nombre}</h6>
-                <small>$${s.precio}</small>
+
+                <small>
+                    $${s.precio}
+                </small>
+
                 <div class="mt-1 text-muted">
-                    ${s.duracion} ${s.unidad_tiempo}
+
+                    ${s.duracion}
+                    ${s.unidad_tiempo}
+
                 </div>
+
             </div>
         `;
 
         col.onclick = () => {
+
             document.querySelectorAll(".servicio-card")
                 .forEach(c => c.classList.remove("active"));
 
@@ -45,18 +53,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                 .classList.add("active");
 
             servicioSeleccionado = s;
+
             actualizarResumen();
         };
 
         serviciosDiv.appendChild(col);
+
     });
 
-    // 🔹 Cargar peluqueros
+    // 🔹 cargar peluqueros
     const peluqueros = await API.getPeluqueros();
 
     peluqueros.forEach(p => {
+
         const btn = document.createElement("button");
-        btn.className = "btn btn-outline-dark peluquero-btn";
+
+        btn.className =
+            "btn btn-outline-dark peluquero-btn";
+
         btn.innerHTML = `
             ${p.nombre}
             <small class="d-block">
@@ -65,232 +79,378 @@ document.addEventListener("DOMContentLoaded", async () => {
         `;
 
         btn.onclick = () => {
+
             document.querySelectorAll(".peluquero-btn")
                 .forEach(b => b.classList.remove("active"));
 
             btn.classList.add("active");
 
             peluqueroSeleccionado = p;
+
             horarioSeleccionado = null;
+
             actualizarResumen();
 
+            // 🔥 si ya eligió fecha
+            // actualizar horarios automáticamente
             if(fechaInput.value){
+
                 renderHorarios();
             }
         };
 
         peluquerosDiv.appendChild(btn);
+
     });
 
-    // 🔹 Render horarios
+    // 🔹 render horarios
     async function renderHorarios() {
+
         const fecha = fechaInput.value;
+
         if (!fecha || !peluqueroSeleccionado) return;
 
-        const horarios = await API.getHorarios(fecha, peluqueroSeleccionado.id);
+        const horarios = await API.getHorarios(
+            fecha,
+            peluqueroSeleccionado.id
+        );
+
         horariosDiv.innerHTML = "";
 
         // 🔥 PROFESIONAL DE FRANCO
         if(horarios.franco){
+
             horariosDiv.innerHTML = `
+        
                 <div class="alert alert-warning w-100 text-center">
+        
                     <i class="fa-solid fa-calendar-xmark"></i>
+        
                     ${horarios.mensaje}
+        
                     <div class="mt-3">
-                        <button id="cambiarFecha" class="btn btn-dark btn-sm">
+        
+                        <button
+                            id="cambiarFecha"
+                            class="btn btn-dark btn-sm">
+        
                             Elegir otro día
+        
                         </button>
+        
                     </div>
+        
                 </div>
             `;
         
-            document.getElementById("cambiarFecha").addEventListener("click", () => {
-                currentStep = 3;
-                updateSteps();
-            });
+            // 🔥 volver al paso fecha
+            document
+                .getElementById("cambiarFecha")
+                .addEventListener("click", () => {
+        
+                    currentStep = 3;
+        
+                    updateSteps();
+        
+                });
+        
             return;
         }
 
         // 🔥 SIN HORARIOS
         if(horarios.error){
+
             horariosDiv.innerHTML = `
                 <div class="alert alert-danger w-100 text-center">
+
                     ${horarios.error}
+
                 </div>
             `;
+
             return;
         }
 
         // 🔥 SIN DISPONIBILIDAD
         if(horarios.length === 0){
+
             horariosDiv.innerHTML = `
                 <div class="alert alert-secondary w-100 text-center">
+
                     No hay horarios disponibles
+
                 </div>
             `;
+
             return;
         }
 
-        // 🔹 Crear botones de hora
+        // 🔹 crear botones
         horarios.forEach(hora => {
+
             const btn = document.createElement("button");
-            btn.className = "btn btn-outline-primary";
+
+            btn.className =
+                "btn btn-outline-primary";
+
             btn.textContent = hora;
 
             btn.onclick = () => {
+
                 document.querySelectorAll("#horarios button")
                     .forEach(b => b.classList.remove("active"));
 
                 btn.classList.add("active");
+
                 horarioSeleccionado = hora;
+
                 actualizarResumen();
             };
 
             horariosDiv.appendChild(btn);
+
         });
+
     }
 
-    fechaInput.addEventListener("change", renderHorarios);
+    fechaInput.addEventListener(
+        "change",
+        renderHorarios
+    );
 
-    // 🔹 Resumen lateral/inferior básico
+    // 🔹 resumen
     function actualizarResumen() {
+
         resumenDiv.innerHTML = `
             <strong>Resumen:</strong><br><br>
-            <strong>Servicio:</strong> ${servicioSeleccionado?.nombre || "-"} <br>
-            <strong>Peluquero:</strong> ${peluqueroSeleccionado?.nombre || "-"} <br>
-            <strong>Fecha:</strong> ${fechaInput.value || "-"} <br>
-            <strong>Horario:</strong> ${horarioSeleccionado || "-"} <br>
-            <strong>Cliente:</strong> ${clienteNombre?.value || "-"} <br>
-            <strong>Teléfono:</strong> ${clienteTelefono?.value || "-"} <br>
+
+            <strong>Servicio:</strong>
+            ${servicioSeleccionado?.nombre || "-"} <br>
+
+            <strong>Peluquero:</strong>
+            ${peluqueroSeleccionado?.nombre || "-"} <br>
+
+            <strong>Fecha:</strong>
+            ${fechaInput.value || "-"} <br>
+
+            <strong>Horario:</strong>
+            ${horarioSeleccionado || "-"} <br>
+
+            <strong>Cliente:</strong>
+            ${clienteNombre?.value || "-"} <br>
+
+            <strong>Teléfono:</strong>
+            ${clienteTelefono?.value || "-"} <br>
+
         `;
     }
 
-    fechaInput.addEventListener("change", actualizarResumen);
-    clienteNombre.addEventListener("input", actualizarResumen);
-    clienteTelefono.addEventListener("input", actualizarResumen);
+    fechaInput.addEventListener(
+        "change",
+        actualizarResumen
+    );
 
-    // 🔥 Wizard
+    clienteNombre.addEventListener(
+        "input",
+        actualizarResumen
+    );
+
+    clienteTelefono.addEventListener(
+        "input",
+        actualizarResumen
+    );
+
+
+    // 🔥 wizard
     let currentStep = 1;
 
-    const steps = document.querySelectorAll(".step");
-    const contents = document.querySelectorAll(".step-content");
-    const nextBtn = document.getElementById("next");
-    const prevBtn = document.getElementById("prev");
+    const steps =
+        document.querySelectorAll(".step");
+
+    const contents =
+        document.querySelectorAll(".step-content");
+
+    const nextBtn =
+        document.getElementById("next");
+
+    const prevBtn =
+        document.getElementById("prev");
 
     function updateSteps() {
+
         steps.forEach((step, i) => {
-            step.classList.toggle("active", i < currentStep);
+
+            step.classList.toggle(
+                "active",
+                i < currentStep
+            );
         });
 
         contents.forEach(content => {
+
             content.classList.remove("active");
-            if (parseInt(content.dataset.step) === currentStep) {
+
+            if (
+                parseInt(content.dataset.step)
+                === currentStep
+            ) {
+
                 content.classList.add("active");
             }
+
         });
     }
 
-    // 🔹 Validaciones
+    // 🔹 validaciones
     function validarPaso() {
-        if (currentStep === 1 && !servicioSeleccionado) {
+
+        if (
+            currentStep === 1 &&
+            !servicioSeleccionado
+        ) {
+
             alert("Elegí un servicio");
+
             return false;
         }
-        if (currentStep === 2 && !peluqueroSeleccionado) {
+
+        if (
+            currentStep === 2 &&
+            !peluqueroSeleccionado
+        ) {
+
             alert("Elegí un peluquero");
+
             return false;
         }
-        if (currentStep === 3 && !fechaInput.value) {
+
+        if (
+            currentStep === 3 &&
+            !fechaInput.value
+        ) {
+
             alert("Seleccioná una fecha");
+
             return false;
         }
-        if (currentStep === 4 && !horarioSeleccionado) {
+
+        if (
+            currentStep === 4 &&
+            !horarioSeleccionado
+        ) {
+
             alert("Elegí un horario");
+
             return false;
         }
+
         if (currentStep === 5) {
+
             if (!clienteNombre.value.trim()) {
+
                 alert("Ingresá tu nombre");
+
                 return false;
             }
+
             if (!clienteTelefono.value.trim()) {
+
                 alert("Ingresá tu teléfono");
+
                 return false;
             }
         }
+
         return true;
     }
 
-    // 🔹 Botón Siguiente / Intercepción en Paso 5
+    // 🔹 siguiente
     nextBtn.onclick = async () => {
+
         if (!validarPaso()) return;
 
         if (currentStep < 5) {
+
             currentStep++;
+
             updateSteps();
+
         } else {
-            // 🚀 INTERCEPCIÓN AQUÍ: Cargamos el resumen dentro del modal modalConfirmacion
-            resumenModal.innerHTML = `
-                <div class="mb-2"><strong>Cliente:</strong> ${clienteNombre.value}</div>
-                <div class="mb-2"><strong>Teléfono:</strong> ${clienteTelefono.value}</div>
-                <hr>
-                <div class="mb-2"><strong>Servicio:</strong> ${servicioSeleccionado.nombre}</div>
-                <div class="mb-2"><strong>Precio:</strong> $${servicioSeleccionado.precio}</div>
-                <div class="mb-2"><strong>Peluquero:</strong> ${peluqueroSeleccionado.nombre}</div>
-                <div class="mb-2"><strong>Fecha:</strong> ${fechaInput.value}</div>
-                <div class="mb-0"><strong>Horario:</strong> ${horarioSeleccionado} hs</div>
+
+            // 🔹 guardar reserva
+            await API.reservarTurno({
+
+                cliente: clienteNombre.value,
+
+                telefono: clienteTelefono.value,
+
+                servicioId: servicioSeleccionado.id,
+
+                servicio: servicioSeleccionado.nombre,
+
+                precio: servicioSeleccionado.precio,
+
+                peluqueroId: peluqueroSeleccionado.id,
+
+                peluquero: peluqueroSeleccionado.nombre,
+
+                fecha: fechaInput.value,
+
+                hora: horarioSeleccionado,
+
+                estado: "pendiente"
+
+            });
+
+            // 🔹 ocultar wizard
+            document.querySelector(".reserva-card")
+                .style.display = "none";
+
+            // 🔹 éxito
+            const successScreen =
+                document.getElementById("successScreen");
+
+            const successResumen =
+                document.getElementById("successResumen");
+
+            successResumen.innerHTML = `
+
+                <strong>Cliente:</strong>
+                ${clienteNombre.value} <br>
+
+                <strong>Teléfono:</strong>
+                ${clienteTelefono.value} <br>
+
+
+                <strong>Servicio:</strong>
+                ${servicioSeleccionado.nombre} <br>
+
+                <strong>Peluquero:</strong>
+                ${peluqueroSeleccionado.nombre} <br>
+
+                <strong>Fecha:</strong>
+                ${fechaInput.value} <br>
+
+                <strong>Horario:</strong>
+                ${horarioSeleccionado}
+
             `;
 
-            // Abrimos el modal nativamente desde JS
-            modalConfirmacion.show();
+            successScreen.style.display = "flex";
         }
     };
 
-    // 🔹 Confirmación Final (Botón verde ADENTRO del modal)
-    btnConfirmarFinal.onclick = async () => {
-        // Ocultamos el modal inmediatamente
-        modalConfirmacion.hide();
-
-        // Guardamos el turno real en la API
-        await API.reservarTurno({
-            cliente: clienteNombre.value,
-            telefono: clienteTelefono.value,
-            servicioId: servicioSeleccionado.id,
-            servicio: servicioSeleccionado.nombre,
-            precio: servicioSeleccionado.precio,
-            peluqueroId: peluqueroSeleccionado.id,
-            peluquero: peluqueroSeleccionado.nombre,
-            fecha: fechaInput.value,
-            hora: horarioSeleccionado,
-            estado: "pendiente"
-        });
-
-        // Ocultamos la tarjeta del asistente
-        document.querySelector(".reserva-card").style.display = "none";
-
-        // Renderizamos la pantalla de éxito final
-        const successScreen = document.getElementById("successScreen");
-        const successResumen = document.getElementById("successResumen");
-
-        successResumen.innerHTML = `
-            <strong>Cliente:</strong> ${clienteNombre.value} <br>
-            <strong>Teléfono:</strong> ${clienteTelefono.value} <br>
-            <strong>Servicio:</strong> ${servicioSeleccionado.nombre} <br>
-            <strong>Peluquero:</strong> ${peluqueroSeleccionado.nombre} <br>
-            <strong>Fecha:</strong> ${fechaInput.value} <br>
-            <strong>Horario:</strong> ${horarioSeleccionado} hs
-        `;
-
-        successScreen.style.display = "flex";
-    };
-
-    // 🔹 Botón Atrás
+    // 🔹 atrás
     prevBtn.onclick = () => {
+
         if (currentStep > 1) {
+
             currentStep--;
+
             updateSteps();
         }
     };
 
     updateSteps();
+
 });

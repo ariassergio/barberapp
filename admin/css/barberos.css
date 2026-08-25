@@ -1,65 +1,339 @@
-/* =========================
-   BARBEROS
-========================= */
-
-.barberos-grid{
+/* ==========================================================================
+   CONFIGURACIÓN GENERAL Y CONTENEDORES
+   ========================================================================== */
+.cards-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 25px;
-}
-
-.barbero-card{
-    background: #111827;
-    border: 1px solid #1e293b;
-    border-radius: 18px;
-    padding: 25px;
-    transition: 0.3s ease;
-    text-align: center;
-}
-
-.barbero-card:hover{
-    transform: translateY(-5px);
-    border-color: #334155;
-}
-
-.barbero-img{
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 20px;
-    border: 3px solid #2563eb;
-}
-
-.barbero-card h3{
-    color: white;
-    margin-bottom: 10px;
-}
-
-.barbero-card p{
-    color: #94a3b8;
-    margin-bottom: 20px;
-}
-
-.barbero-stats{
-    display: flex;
-    justify-content: space-between;
     margin-top: 20px;
 }
 
-.barbero-stat{
-    background: #1e293b;
-    padding: 12px;
-    border-radius: 12px;
-    width: 48%;
-}
-
-.barbero-stat h4{
+/* Botón Nuevo Profesional (Premium Glow) */
+.new-barbero-btn {
+    background: #2563eb;
     color: white;
-    margin-bottom: 5px;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+    display: inline-flex;
+    align-items: center;
 }
 
-.barbero-stat span{
+.new-barbero-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+}
+
+/* ==========================================================================
+   TARJETAS DE BARBEROS (ADMIN CARD)
+   ========================================================================== */
+.admin-card {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 20px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.admin-card:hover {
+    transform: translateY(-5px);
+    border-color: #3b82f6;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.12);
+}
+
+/* Efecto visual opaco para Barberos Deshabilitados/Francos */
+.admin-card.profesional-deshabilitado {
+    opacity: 0.5;
+    border-color: rgba(220, 53, 69, 0.2);
+}
+
+.admin-card.profesional-deshabilitado:hover {
+    box-shadow: 0 10px 25px rgba(220, 53, 69, 0.05);
+    border-color: rgba(220, 53, 69, 0.4);
+}
+
+/* Contenedor del Avatar/Ícono del Barbero */
+.card-barber-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+}
+
+.card-barber-avatar i {
+    color: #60a5fa;
+    font-size: 24px;
+}
+
+/* Tipografías e Información interna */
+.admin-card h3 {
+    color: #ffffff;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+}
+
+.barber-specialty {
     color: #94a3b8;
-    font-size: 14px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+/* Estado Badges (Activo / Inactivo) */
+.estado-badge {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.estado-badge.activo {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
+}
+
+.estado-badge.inactivo {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+}
+
+/* ==========================================================================
+   BOTONES DE ACCIÓN DENTRO DE LA TARJETA
+   ========================================================================== */
+.btn-card-action {
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Botón Editar */
+.btn-edit-barber {
+    background: #1f2937;
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.btn-edit-barber:hover {
+    background: #334155;
+    color: #ffffff;
+}
+
+/* Botón Horarios */
+.btn-schedule-barber {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.15);
+}
+
+.btn-schedule-barber:hover {
+    background: #2563eb;
+    color: white;
+}
+
+/* Botones Dinámicos de Estado (Habilitar / Deshabilitar) */
+.btn-toggle-disable {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.btn-toggle-disable:hover {
+    background: #dc2626;
+    color: white;
+}
+
+.btn-toggle-enable {
+    background: rgba(34, 197, 94, 0.1);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.15);
+}
+
+.btn-toggle-enable:hover {
+    background: #16a34a;
+    color: white;
+}
+
+/* ==========================================================================
+   ESTILOS PREMIUM CONTROL DE MODALES (ANTI-TEXTO INVISIBLE)
+   ========================================================================== */
+.premium-modal {
+    background-color: #111827 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 24px !important;
+    overflow: hidden;
+    color: #ffffff;
+}
+
+.premium-modal .modal-header {
+    padding: 1.5rem 1.8rem;
+    background: linear-gradient(135deg, #1f2937, #111827);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.modal-header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.premium-modal .modal-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+}
+
+/* Colores de íconos de modales */
+.premium-modal .modal-icon.create-icon {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.premium-modal .modal-icon.edit-icon {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.premium-modal .modal-icon.schedule-icon {
+    background: rgba(168, 85, 247, 0.15);
+    color: #a855f7;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+.premium-modal .modal-title {
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.premium-modal .modal-subtitle {
+    color: #9ca3af;
+    font-size: 0.85rem;
+}
+
+/* Formularios internos e Inputs */
+.form-label {
+    color: #cbd5e1;
+    font-size: 0.88rem;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.custom-input {
+    background: #1f2937 !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+.custom-input .input-group-text {
+    background: transparent !important;
+    border: none !important;
+    color: #9ca3af !important;
+    padding-left: 15px;
+}
+
+.custom-input .form-control {
+    background: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    box-shadow: none !important;
+    padding: 10px 12px;
+}
+
+.custom-input .form-control::placeholder {
+    color: #6b7280 !important;
+}
+
+/* Bloque del Checkbox Custom */
+.custom-checkbox .form-check-input {
+    background-color: #111827;
+    border-color: rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+}
+
+.custom-checkbox .form-check-input:checked {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+/* Selectores Horarios y Desplegables */
+.modern-select {
+    background-color: #1f2937 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 12px !important;
+    padding: 10px 12px;
+    box-shadow: none !important;
+}
+
+/* Forzar renderizado oscuro de opciones nativas */
+.modern-select option {
+    background-color: #111827 !important;
+    color: #ffffff !important;
+}
+
+/* Footers de modales */
+.premium-modal .modal-footer {
+    background: #0f172a;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 1.2rem 1.8rem;
+}
+
+.premium-modal .btn-cancel {
+    background: #1f2937 !important;
+    color: #ffffff !important;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.premium-modal .btn-cancel:hover {
+    background: #334155 !important;
+}
+
+.premium-modal .btn-save {
+    background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+    color: #ffffff !important;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.premium-modal .btn-save:hover {
+    transform: translateY(-2px);
+}
+
+.text-blanco {
+    color: white !important;
 }

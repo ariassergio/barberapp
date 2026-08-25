@@ -12,6 +12,10 @@ body{
 
 /* CONTENEDOR */
 
+.table-container-premium {
+    overflow-x: auto;
+}
+
 .admin-container{
     display: flex;
     min-height: 100vh;
@@ -193,6 +197,7 @@ body{
     border: 1px solid #1e293b;
     border-radius: 18px;
     padding: 25px;
+    overflow-x: auto;
 }
 
 .table-header{
@@ -300,9 +305,35 @@ body{
         flex-direction: column;
     }
 
-    .sidebar{
-        width: 100%;
-        min-height: auto;
+    /* Ocultar el sidebar por defecto en móviles y prepararlo para offcanvas */
+    .sidebar {
+        position: fixed;
+        left: -260px;
+        top: 0;
+        bottom: 0;
+        width: 260px;
+        height: 100vh;
+        z-index: 1050;
+        transition: 0.3s ease;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* Mostrar sidebar offcanvas */
+    .sidebar.show-mobile {
+        left: 0;
+    }
+
+    .menu a span, .logo h2 {
+        display: inline;
+    }
+
+    .menu a {
+        justify-content: flex-start;
+    }
+
+    /* Botón hamburguesa visible */
+    .btn-mobile-toggle {
+        display: block !important;
     }
 
     .cards-container{
@@ -311,6 +342,32 @@ body{
 
     .main-content{
         padding: 20px;
+        width: 100%;
     }
 
+    /* Fix navbar */
+    .top-navbar {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    /* Hacer modales mas anchos en mobile */
+    .modal-dialog {
+        margin: 10px;
+    }
+}
+
+/* OVERLAY PARA EL MENU OFF CANVAS */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    z-index: 1040;
+    display: none;
+}
+.sidebar-overlay.show {
+    display: block;
 }

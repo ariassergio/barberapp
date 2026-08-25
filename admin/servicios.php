@@ -16,11 +16,8 @@ $resultado = mysqli_query($conn, $sql);
     <title>Servicios</title>
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/servicios.css">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 
 <body>
@@ -35,98 +32,67 @@ $resultado = mysqli_query($conn, $sql);
 
         <section class="dashboard">
 
-            <h1 class="dashboard-title">
-                Servicios
-            </h1>
-            <div class="mb-4">
-
-                <button
-                    class="btn btn-dark"
-                    data-bs-toggle="modal"
-                    data-bs-target="#modalServicio">
-
-                    <i class="fa-solid fa-plus"></i>
-                    Nuevo servicio
-
+            <div class="servicios-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                <div>
+                    <h1 class="dashboard-title mb-1">Servicios</h1>
+                    <p class="mb-0 text-blanco">Configurá la oferta, precios y tiempos de la barbería</p>
+                </div>
+                <button class="new-servicio-btn" data-bs-toggle="modal" data-bs-target="#modalServicio">
+                    <i class="fa-solid fa-plus me-2"></i> Nuevo servicio
                 </button>
-
             </div>
+
             <div class="cards-container">
 
-                <?php while($servicio = mysqli_fetch_assoc($resultado)) : ?>
+                <?php while($servicio = mysqli_fetch_assoc($resultado)) : 
+                    // Si el servicio está deshabilitado, le agregamos una clase para opacarlo en CSS
+                    $claseInactivo = ($servicio['activo'] == 0) ? 'servicio-deshabilitado' : '';
+                ?>
 
-                <div class="admin-card">
+                <div class="admin-card <?= $claseInactivo ?>">
+                    <div class="card-service-icon">
+                        <i class="fa-solid fa-scissors"></i>
+                    </div>
 
-                    <i class="fa-solid fa-briefcase"></i>
+                    <h3><?= htmlspecialchars($servicio['nombre']); ?></h3>
 
-                    <h3>
-                        <?= $servicio['nombre']; ?>
-                    </h3>
+                    <div class="service-meta-data">
+                        <p class="service-price">
+                            $<?= number_format($servicio['precio'], 0, ',', '.'); ?>
+                        </p>
+                        <span class="service-duration">
+                            <i class="fa-regular fa-clock me-1"></i> 
+                            <?= $servicio['duracion']; ?> <?= htmlspecialchars($servicio['unidad_tiempo']); ?>
+                        </span>
+                    </div>
 
-                    <p>
-                        $<?= number_format($servicio['precio'], 0, ',', '.'); ?>
-                    </p>
+                    <div class="service-card-actions w-100 mt-3 d-flex flex-column gap-2">
+                        <button class="btn-card-action btn-edit-serv btn-editar"
+                                data-id="<?= $servicio['id_servicio']; ?>"
+                                data-nombre="<?= htmlspecialchars($servicio['nombre']); ?>"
+                                data-precio="<?= $servicio['precio']; ?>"
+                                data-duracion="<?= $servicio['duracion']; ?>"
+                                data-unidad="<?= htmlspecialchars($servicio['unidad_tiempo']); ?>"
+                                data-bs-toggle="modal"
+                                data-bs-target="#modalEditarServicio">
+                            <i class="fa-solid fa-pen me-2"></i> Editar catálogo
+                        </button>
 
-                    <span>
-                        <?= $servicio['duracion']; ?>
-                        <?= $servicio['unidad_tiempo']; ?>
-                    </span>
-                    <button
-                        class="btn btn-dark btn-sm mt-3 btn-editar"
+                        <form action="actions/toggle_servicio.php" method="POST" class="w-100 m-0 form-toggle-servicio">
+                            <input type="hidden" name="id_servicio" value="<?= $servicio['id_servicio']; ?>">
+                            <input type="hidden" name="estado_actual" value="<?= $servicio['activo']; ?>">
 
-                        data-id="<?= $servicio['id_servicio']; ?>"
-                        data-nombre="<?= $servicio['nombre']; ?>"
-                        data-precio="<?= $servicio['precio']; ?>"
-                        data-duracion="<?= $servicio['duracion']; ?>"
-                        data-unidad="<?= $servicio['unidad_tiempo']; ?>"
-
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalEditarServicio">
-
-                        <i class="fa-solid fa-pen"></i>
-                        Editar
-
-                    </button>
-                    <form
-                        action="actions/toggle_servicio.php"
-                        method="POST"
-                        class="mt-2">
-
-                        <input
-                            type="hidden"
-                            name="id_servicio"
-                            value="<?= $servicio['id_servicio']; ?>">
-
-                        <input
-                            type="hidden"
-                            name="estado_actual"
-                            value="<?= $servicio['activo']; ?>">
-
-                        <?php if($servicio['activo'] == 1): ?>
-
-                            <button
-                                type="submit"
-                                class="btn btn-danger btn-sm">
-
-                                <i class="fa-solid fa-ban"></i>
-                                Deshabilitar
-
-                            </button>
-
-                        <?php else: ?>
-
-                            <button
-                                type="submit"
-                                class="btn btn-success btn-sm">
-
-                                <i class="fa-solid fa-check"></i>
-                                Habilitar
-
-                            </button>
-
-                        <?php endif; ?>
-
-                    </form>
+                            <?php if($servicio['activo'] == 1): ?>
+                                <button type="button" class="btn-card-action btn-toggle-disable w-100 btn-confirm-toggle" data-action="deshabilitar">
+                                    <i class="fa-solid fa-ban me-2"></i> Deshabilitar
+                                </button>
+                            <?php else: ?>
+                                <button type="button" class="btn-card-action btn-toggle-enable w-100 btn-confirm-toggle" data-action="habilitar">
+                                    <i class="fa-solid fa-check me-2"></i> Habilitar servicio
+                                </button>
+                            <?php endif; ?>
+                        </form>
+                    </div>
                 </div>
 
                 <?php endwhile; ?>
@@ -134,276 +100,188 @@ $resultado = mysqli_query($conn, $sql);
             </div>
 
         </section>
-
     </main>
-
 </div>
+
 <div class="modal fade" id="modalServicio" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content premium-modal">
+            <form action="actions/crear_servicios.php" method="POST" class="m-0">
 
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <form action="actions/crear_servicios.php" method="POST">
-
-                <div class="modal-header">
-
-                    <h5 class="modal-title">
-                        Agregar servicio
-                    </h5>
-
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                    </button>
-
+                <div class="modal-header border-0">
+                    <div class="modal-header-content">
+                        <div class="modal-icon create-icon">
+                            <i class="fa-solid fa-scissors"></i>
+                        </div>
+                        <div>
+                            <h4 class="modal-title mb-1">Agregar Servicio</h4>
+                            <p class="modal-subtitle mb-0">Introducí los datos para el nuevo servicio</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
-
                     <div class="mb-3">
-
-                        <label class="form-label">
-                            Nombre
-                        </label>
-
-                        <input
-                            type="text"
-                            name="nombre"
-                            class="form-control"
-                            required>
-
-                    </div>
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Precio
-                        </label>
-
-                        <input
-                            type="number"
-                            name="precio"
-                            class="form-control"
-                            required>
-
-                    </div>
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Duración
-                        </label>
-
-                        <div class="duracion-container">
-
-                            <input
-                                type="number"
-                                name="duracion"
-                                class="form-control"
-                                required>
-
-                            <select
-                                name="unidad"
-                                class="form-select">
-
-                                <option value="minutos">
-                                    Minutos
-                                </option>
-
-                                <option value="horas">
-                                    Horas
-                                </option>
-
-                            </select>
-
+                        <label class="form-label">Nombre del Servicio</label>
+                        <div class="input-group custom-input">
+                            <span class="input-group-text"><i class="fa-solid fa-signature"></i></span>
+                            <input type="text" name="nombre" class="form-control" placeholder="Ej: Corte + Perfilado de Barba" required>
                         </div>
-
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label">Precio</label>
+                        <div class="input-group custom-input">
+                            <span class="input-group-text"><i class="fa-solid fa-dollar-sign"></i></span>
+                            <input type="number" name="precio" class="form-control" placeholder="0000" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Duración Estimada</label>
+                        <div class="duracion-row d-flex gap-2">
+                            <div class="input-group custom-input flex-grow-1">
+                                <span class="input-group-text"><i class="fa-solid fa-clock"></i></span>
+                                <input type="number" name="duracion" class="form-control" placeholder="30" required>
+                            </div>
+                            <select name="unidad" class="form-select modern-select m-0" style="width: 140px;">
+                                <option value="minutos">Minutos</option>
+                                <option value="horas">Horas</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="modal-footer">
-
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-
-                        Cancelar
-
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-save">
+                        <i class="fa-solid fa-floppy-disk me-2"></i> Guardar servicio
                     </button>
-
-                    <button
-                        type="submit"
-                        class="btn btn-dark">
-
-                        Guardar servicio
-
-                    </button>
-
                 </div>
 
             </form>
-
         </div>
-
     </div>
-
 </div>
+
 <div class="modal fade" id="modalEditarServicio" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content premium-modal">
+            <form action="actions/editar_servicio.php" method="POST" class="m-0" id="form-editar-servicio">
 
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <form action="actions/editar_servicio.php" method="POST">
-
-                <div class="modal-header">
-
-                    <h5 class="modal-title">
-                        Editar servicio
-                    </h5>
-
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                    </button>
-
+                <div class="modal-header border-0">
+                    <div class="modal-header-content">
+                        <div class="modal-icon edit-icon">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </div>
+                        <div>
+                            <h4 class="modal-title mb-1">Editar Servicio</h4>
+                            <p class="modal-subtitle mb-0">Modificá los valores del catálogo actual</p>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
 
                 <div class="modal-body">
-
-                    <input
-                        type="hidden"
-                        name="id_servicio"
-                        id="editar-id">
+                    <input type="hidden" name="id_servicio" id="editar-id">
 
                     <div class="mb-3">
-
-                        <label class="form-label">
-                            Nombre
-                        </label>
-
-                        <input
-                            type="text"
-                            name="nombre"
-                            id="editar-nombre"
-                            class="form-control"
-                            required>
-
-                    </div>
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Precio
-                        </label>
-
-                        <input
-                            type="number"
-                            name="precio"
-                            id="editar-precio"
-                            class="form-control"
-                            required>
-
-                    </div>
-
-                    <div class="mb-3">
-
-                        <label class="form-label">
-                            Duración
-                        </label>
-
-                        <div class="duracion-container">
-
-                            <input
-                                type="number"
-                                name="duracion"
-                                id="editar-duracion"
-                                class="form-control"
-                                required>
-
-                            <select
-                                name="unidad"
-                                id="editar-unidad"
-                                class="form-select">
-
-                                <option value="minutos">
-                                    Minutos
-                                </option>
-
-                                <option value="horas">
-                                    Horas
-                                </option>
-
-                            </select>
-
+                        <label class="form-label">Nombre del Servicio</label>
+                        <div class="input-group custom-input">
+                            <span class="input-group-text"><i class="fa-solid fa-signature"></i></span>
+                            <input type="text" name="nombre" id="editar-nombre" class="form-control" required>
                         </div>
-
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label">Precio</label>
+                        <div class="input-group custom-input">
+                            <span class="input-group-text"><i class="fa-solid fa-dollar-sign"></i></span>
+                            <input type="number" name="precio" id="editar-precio" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Duración Estimada</label>
+                        <div class="duracion-row d-flex gap-2">
+                            <div class="input-group custom-input flex-grow-1">
+                                <span class="input-group-text"><i class="fa-solid fa-clock"></i></span>
+                                <input type="number" name="duracion" id="editar-duracion" class="form-control" required>
+                            </div>
+                            <select name="unidad" id="editar-unidad" class="form-select modern-select m-0" style="width: 140px;">
+                                <option value="minutos">Minutos</option>
+                                <option value="horas">Horas</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="modal-footer">
-
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        data-bs-dismiss="modal">
-
-                        Cancelar
-
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-save" id="btn-save-edit-servicio">
+                        <i class="fa-solid fa-floppy-disk me-2"></i> Guardar cambios
                     </button>
-
-                    <button
-                        type="submit"
-                        class="btn btn-dark">
-
-                        Guardar cambios
-
-                    </button>
-
                 </div>
 
             </form>
-
         </div>
-
     </div>
-
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-<script>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
 const botonesEditar = document.querySelectorAll(".btn-editar");
 
 botonesEditar.forEach(boton => {
-
     boton.addEventListener("click", () => {
-
-        document.getElementById("editar-id").value =
-            boton.dataset.id;
-
-        document.getElementById("editar-nombre").value =
-            boton.dataset.nombre;
-
-        document.getElementById("editar-precio").value =
-            boton.dataset.precio;
-
-        document.getElementById("editar-duracion").value =
-            boton.dataset.duracion;
-
-        document.getElementById("editar-unidad").value =
-            boton.dataset.unidad;
-
+        document.getElementById("editar-id").value = boton.dataset.id;
+        document.getElementById("editar-nombre").value = boton.dataset.nombre;
+        document.getElementById("editar-precio").value = boton.dataset.precio;
+        document.getElementById("editar-duracion").value = boton.dataset.duracion;
+        document.getElementById("editar-unidad").value = boton.dataset.unidad;
     });
-
 });
 
+document.getElementById('btn-save-edit-servicio').addEventListener('click', function() {
+    Swal.fire({
+        title: '¿Guardar cambios?',
+        text: '¿Estás seguro de modificar este servicio?',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('form-editar-servicio').submit();
+        }
+    });
+});
+
+document.querySelectorAll(".btn-confirm-toggle").forEach(boton => {
+    boton.addEventListener("click", function() {
+        const accion = this.dataset.action;
+        const form = this.closest('form');
+        
+        Swal.fire({
+            title: `¿${accion.charAt(0).toUpperCase() + accion.slice(1)} servicio?`,
+            text: `Estás a punto de ${accion} este servicio en el catálogo.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, confirmar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+});
 </script>
 </body>
-
 </html>

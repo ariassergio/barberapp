@@ -1,8 +1,12 @@
 <?php
 // admin/includes/auth.php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: /admin/login.php");
+// Allow logged in users with role 'admin', 'owner' or 'maintainer'
+if (!isset($_SESSION['admin_id']) || !isset($_SESSION['admin_rol']) || !in_array($_SESSION['admin_rol'], ['admin', 'owner', 'maintainer'])) {
+    header('Location: login.php');
     exit;
 }
+?>

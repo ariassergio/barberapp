@@ -1,5 +1,6 @@
 body {
-    background-color: #f5f5f5;
+    background-color: #f0f2f5; /* Un gris muy suave y moderno para que no moleste la vista */
+    font-family: 'Inter', sans-serif;
 }
 
 /* CARD */
@@ -117,16 +118,17 @@ body {
 /* CARD */
 .servicio-card {
     background: white;
-    border-radius: 12px;
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    transition: 0.3s;
+    border: none;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     height: 100%;
 }
 
 .servicio-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
 }
 
 /* IMAGEN */
@@ -162,15 +164,16 @@ body {
 /* RESEÑAS */
 .reseña-card {
     background: white;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
     height: 100%;
-    transition: 0.3s;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .reseña-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
 }
 
 .reseña-card p {
@@ -209,9 +212,10 @@ body {
 /* CARD */
 .reserva-card {
     background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+    border: none;
 }
 
 /* STEPS */
@@ -327,4 +331,71 @@ body {
     margin-top: 15px;
     text-align: left;
     font-size: 0.95rem;
+}
+
+/* =========================
+   RESPONSIVE / MOBILE
+========================= */
+@media (max-width: 768px) {
+    .banner-img {
+        height: 200px;
+    }
+
+    .titulo-seccion {
+        font-size: 1.8rem;
+    }
+
+    .quienes-somos .row {
+        flex-direction: column-reverse;
+    }
+
+    .quienes-somos .col-md-6 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .img-quienes {
+        max-height: 220px;
+        margin-bottom: 20px;
+    }
+
+    .servicio-card {
+        margin-bottom: 15px;
+    }
+
+    .cta-reserva {
+        padding: 40px 15px;
+    }
+
+    .reserva-card {
+        padding: 20px;
+    }
+
+    .steps {
+        gap: 5px;
+        justify-content: space-between;
+    }
+
+    .step {
+        width: 30px;
+        height: 30px;
+        font-size: 0.9rem;
+    }
+
+    /* Make touch targets larger on mobile */
+    .btn, .form-control-lg, .servicio-card {
+        padding: 12px 20px;
+    }
+
+    #peluqueros .btn, #horarios .btn {
+        width: 100%;
+        margin-bottom: 8px;
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+
+    .success-card {
+        width: 95%;
+        padding: 25px;
+    }
 }

@@ -30,6 +30,4 @@ mysqli_stmt_bind_param(
 
 mysqli_stmt_execute($stmt);
 
-header("Location: ../servicios.php");
-
-?>
+header("Location: ../servicios.php");

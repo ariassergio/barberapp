@@ -101,7 +101,9 @@ $resultado = mysqli_query($conn, $sql);
 
                         <td>
                             <div class="cliente-info">
-                                <img src="https://i.pravatar.cc/45?u=<?= urlencode($turno['nombre']) ?>" class="cliente-avatar">
+                            <div class="cliente-avatar d-flex align-items-center justify-content-center bg-light text-muted rounded-circle" style="width: 45px; height: 45px;">
+                                <i class="fa-solid fa-user fa-lg"></i>
+                            </div>
                                 <div>
                                     <h4><?= htmlspecialchars($turno['nombre']) ?></h4>
                                     <span><?= htmlspecialchars($turno['telefono']) ?></span>
@@ -116,7 +118,15 @@ $resultado = mysqli_query($conn, $sql);
                         <td><?= date("H:i", strtotime($turno['fecha_inicio'])) ?></td>
 
                         <td>
-                            <span class="estado <?= strtolower($turno['estado']) ?>">
+                            <?php
+                                $est = strtolower($turno['estado']);
+                                $badgeClass = 'bg-secondary text-white';
+                                if ($est === 'pendiente') $badgeClass = 'bg-warning text-dark';
+                                elseif ($est === 'finalizado') $badgeClass = 'bg-success text-white';
+                                elseif ($est === 'cancelado') $badgeClass = 'bg-danger text-white';
+                                elseif ($est === 'confirmado') $badgeClass = 'bg-primary text-white';
+                            ?>
+                            <span class="badge <?= $badgeClass ?> px-3 py-2" style="border-radius: 50px;">
                                 <?= ucfirst($turno['estado']) ?>
                             </span>
                         </td>
@@ -175,24 +185,84 @@ $resultado = mysqli_query($conn, $sql);
 
 <!-- ===================== MODAL VER ===================== -->
 <div class="modal fade" id="modalDetalleReserva" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detalle de reserva</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content premium-modal detail-modal">
+            
+            <div class="modal-header border-0">
+                <div class="modal-header-content">
+                    <div class="modal-icon view-icon">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <div>
+                        <h4 class="modal-title mb-1">Detalle de la Reserva</h4>
+                        <p class="modal-subtitle mb-0">Información completa del turno seleccionado</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
+
             <div class="modal-body">
+                <div class="info-display-card primary-card mb-4">
+                    <div class="card-icon-aside">
+                        <i class="fa-solid fa-user-tag"></i>
+                    </div>
+                    <div>
+                        <span class="card-label">Cliente</span>
+                        <h5 id="detalle-cliente" class="card-value-highlight mb-1">-</h5>
+                        <p id="detalle-telefono" class="card-subvalue mb-0"><i class="fa-solid fa-phone me-1"></i> -</p>
+                    </div>
+                </div>
+
                 <div class="row g-3">
-                    <div class="col-md-6"><strong>Cliente:</strong><p id="detalle-cliente"></p></div>
-                    <div class="col-md-6"><strong>Teléfono:</strong><p id="detalle-telefono"></p></div>
-                    <div class="col-md-6"><strong>Servicio:</strong><p id="detalle-servicio"></p></div>
-                    <div class="col-md-6"><strong>Profesional:</strong><p id="detalle-profesional"></p></div>
-                    <div class="col-md-6"><strong>Fecha:</strong><p id="detalle-fecha"></p></div>
-                    <div class="col-md-6"><strong>Hora:</strong><p id="detalle-hora"></p></div>
-                    <div class="col-md-6"><strong>Estado:</strong><p id="detalle-estado"></p></div>
-                    <div class="col-12"><strong>Reserva creada:</strong><p id="detalle-registro"></p></div>
+                    <div class="col-6">
+                        <div class="info-display-group">
+                            <span class="group-label"><i class="fa-solid fa-scissors me-1"></i> Servicio</span>
+                            <p id="detalle-servicio" class="group-value">-</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-display-group">
+                            <span class="group-label"><i class="fa-solid fa-user-tie me-1"></i> Especialista</span>
+                            <p id="detalle-profesional" class="group-value">-</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-display-group">
+                            <span class="group-label"><i class="fa-solid fa-calendar me-1"></i> Fecha</span>
+                            <p id="detalle-fecha" class="group-value">-</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-display-group">
+                            <span class="group-label"><i class="fa-solid fa-clock me-1"></i> Horario</span>
+                            <p id="detalle-hora" class="group-value">-</p>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="info-display-group">
+                            <span class="group-label"><i class="fa-solid fa-toggle-on me-1"></i> Estado Actual</span>
+                            <div class="mt-1">
+                                <span id="detalle-estado" class="badge-status-modern">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resumen-card mt-4 bg-light border-0">
+                    <div class="resumen-icon text-muted">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <div>
+                        <h6 class="mb-0 text-muted" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Registro de Auditoría</h6>
+                        <p id="detalle-registro" class="mb-0 text-secondary" style="font-size: 0.85rem;">Creado el: -</p>
+                    </div>
                 </div>
             </div>
+            
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-cancel w-100" data-bs-dismiss="modal">Cerrar Detalle</button>
+            </div>
+
         </div>
     </div>
 </div>
@@ -200,64 +270,92 @@ $resultado = mysqli_query($conn, $sql);
 
 <!-- ===================== MODAL EDITAR ===================== -->
 <div class="modal fade" id="modalEditarReserva" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content premium-modal edit-modal">
 
-            <div class="modal-header">
-                <h5 class="modal-title">Editar reserva</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            <div class="modal-header border-0">
+                <div class="modal-header-content">
+                    <div class="modal-icon edit-icon">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </div>
+                    <div>
+                        <h4 class="modal-title mb-1">Modificar Reserva</h4>
+                        <p class="modal-subtitle mb-0">Actualizá el estado, horarios o asignaciones</p>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
                 <input type="hidden" id="edit-id">
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Estado</label>
-                    <select id="edit-estado" class="form-select">
-                        <option value="pendiente">Pendiente</option>
-                        <option value="confirmado">Confirmado</option>
-                        <option value="cancelado">Cancelado</option>
-                        <option value="finalizado">Finalizado</option>
+                <div class="modal-section mb-4">
+                    <label class="form-label group-label mb-2"><i class="fa-solid fa-circle-info me-1"></i> Estado de la Reserva</label>
+                    <select id="edit-estado" class="form-select modern-select status-selector">
+                        <option value="pendiente">⏳ Pendiente</option>
+                        <option value="confirmado">✅ Confirmado</option>
+                        <option value="cancelado">❌ Cancelado</option>
+                        <option value="finalizado">💈 Finalizado</option>
                     </select>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Fecha</label>
-                    <input type="date" id="edit-fecha" class="form-control">
-                </div>
+                <div class="modal-section">
+                    <h6 class="section-title">
+                        <i class="fa-solid fa-clock"></i> Programación y Asignación
+                    </h6>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Fecha</label>
+                            <div class="input-group custom-input">
+                                <span class="input-group-text"><i class="fa-solid fa-calendar"></i></span>
+                                <input type="date" id="edit-fecha" class="form-control">
+                            </div>
+                        </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Hora</label>
-                    <input type="time" id="edit-hora" class="form-control">
-                </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Hora</label>
+                            <div class="input-group custom-input">
+                                <span class="input-group-text"><i class="fa-solid fa-clock"></i></span>
+                                <input type="time" id="edit-hora" class="form-control">
+                            </div>
+                        </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Profesional</label>
-                    <select id="edit-profesional" class="form-select">
-                        <?php foreach ($profesionales as $p): ?>
-                            <option value="<?= $p['id_profesional'] ?>">
-                                <?= htmlspecialchars($p['nombre']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Profesional</label>
+                            <div class="input-group custom-input">
+                                <span class="input-group-text"><i class="fa-solid fa-user-tie"></i></span>
+                                <select id="edit-profesional" class="form-select">
+                                    <?php foreach ($profesionales as $p): ?>
+                                        <option value="<?= $p['id_profesional'] ?>">
+                                            <?= htmlspecialchars($p['nombre']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-semibold">Servicio</label>
-                    <select id="edit-servicio" class="form-select">
-                        <?php foreach ($servicios as $s): ?>
-                            <option value="<?= $s['id_servicio'] ?>">
-                                <?= htmlspecialchars($s['nombre']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+                        <div class="col-md-6">
+                            <label class="form-label">Servicio</label>
+                            <div class="input-group custom-input">
+                                <span class="input-group-text"><i class="fa-solid fa-scissors"></i></span>
+                                <select id="edit-servicio" class="form-select">
+                                    <?php foreach ($servicios as $s): ?>
+                                        <option value="<?= $s['id_servicio'] ?>">
+                                            <?= htmlspecialchars($s['nombre']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="btn-guardar-edicion">
-                    <i class="fa-solid fa-floppy-disk me-1"></i> Guardar cambios
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-save" id="btn-guardar-edicion">
+                    <i class="fa-solid fa-floppy-disk me-2"></i> Guardar cambios
                 </button>
             </div>
 
@@ -487,8 +585,8 @@ $resultado = mysqli_query($conn, $sql);
     </div>
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 
 // =====================
@@ -496,17 +594,23 @@ $resultado = mysqli_query($conn, $sql);
 // =====================
 document.querySelectorAll(".btn-view").forEach(btn => {
     btn.addEventListener("click", () => {
-        document.getElementById("detalle-cliente").textContent    = btn.dataset.cliente;
-        document.getElementById("detalle-telefono").textContent   = btn.dataset.telefono;
-        document.getElementById("detalle-servicio").textContent   = btn.dataset.servicio;
-        document.getElementById("detalle-profesional").textContent= btn.dataset.profesional;
-        document.getElementById("detalle-fecha").textContent      = btn.dataset.fecha;
-        document.getElementById("detalle-hora").textContent       = btn.dataset.hora;
-        document.getElementById("detalle-estado").textContent     = btn.dataset.estado;
-        document.getElementById("detalle-registro").textContent   = btn.dataset.registro;
+        document.getElementById("detalle-cliente").textContent     = btn.dataset.cliente;
+        document.getElementById("detalle-telefono").textContent    = btn.dataset.telefono;
+        document.getElementById("detalle-servicio").textContent    = btn.dataset.servicio;
+        document.getElementById("detalle-profesional").textContent = btn.dataset.profesional;
+        document.getElementById("detalle-fecha").textContent       = btn.dataset.fecha;
+        document.getElementById("detalle-hora").textContent        = btn.dataset.hora;
+        document.getElementById("detalle-registro").textContent    = btn.dataset.registro;
+
+        // --- ACÁ VA EL AJUSTE NUEVO ---
+        const elEstado = document.getElementById("detalle-estado");
+        const estadoTexto = btn.dataset.estado;
+        elEstado.textContent = estadoTexto.toUpperCase();
+        // Le asigna las clases dinámicas (ej: 'estado pendiente', 'estado confirmado')
+        elEstado.className = `badge-status-modern estado ${estadoTexto.toLowerCase()}`;
+        // ------------------------------
     });
 });
-
 
 // =====================
 // MODAL EDITAR — pre-cargar datos
@@ -535,35 +639,53 @@ document.getElementById("btn-guardar-edicion").addEventListener("click", async (
     const profId  = document.getElementById("edit-profesional").value;
     const servId  = document.getElementById("edit-servicio").value;
 
+    const profNombre = document.getElementById("edit-profesional").options[document.getElementById("edit-profesional").selectedIndex].text.trim();
+    const servNombre = document.getElementById("edit-servicio").options[document.getElementById("edit-servicio").selectedIndex].text.trim();
+
     if (!fecha || !hora) {
         mostrarToast("Completá fecha y hora", "danger");
         return;
     }
 
-    const res = await fetch("actions/editar_reserva.php", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            id_turno:       parseInt(id),
-            estado:         estado,
-            fecha:          fecha,
-            hora:           hora,
-            id_profesional: parseInt(profId),
-            id_servicio:    parseInt(servId)
-        })
+    Swal.fire({
+        title: '¿Confirmar cambios?',
+        html: `Estás a punto de modificar la reserva:<br>
+               <b>Fecha:</b> ${fecha}<br>
+               <b>Hora:</b> ${hora}<br>
+               <b>Barbero:</b> ${profNombre}<br>
+               <b>Servicio:</b> ${servNombre}<br>
+               <b>Estado:</b> ${estado.toUpperCase()}`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            const res = await fetch("actions/editar_reserva.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    id_turno:       parseInt(id),
+                    estado:         estado,
+                    fecha:          fecha,
+                    hora:           hora,
+                    id_profesional: parseInt(profId),
+                    id_servicio:    parseInt(servId)
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.ok) {
+                bootstrap.Modal.getInstance(document.getElementById("modalEditarReserva")).hide();
+                Swal.fire('Guardado', 'Reserva actualizada correctamente', 'success').then(() => location.reload());
+            } else {
+                Swal.fire('Error', 'Error al guardar los cambios', 'error');
+            }
+        }
     });
-
-    const data = await res.json();
-
-    if (data.ok) {
-        bootstrap.Modal.getInstance(
-            document.getElementById("modalEditarReserva")
-        ).hide();
-        mostrarToast("Reserva actualizada correctamente", "success");
-        setTimeout(() => location.reload(), 1200);
-    } else {
-        mostrarToast("Error al guardar los cambios", "danger");
-    }
 });
 // =====================
 // CREAR RESERVA
@@ -628,17 +750,27 @@ document.querySelectorAll(".btn-delete").forEach(btn => {
         const nombre = btn.dataset.cliente;
         const id     = btn.dataset.id;
 
-        if (!confirm(`¿Cancelar el turno de ${nombre}?`)) return;
+        Swal.fire({
+            title: '¿Cancelar turno?',
+            text: `¿Estás seguro que deseas cancelar el turno de ${nombre}? Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, cancelar turno',
+            cancelButtonText: 'Volver'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res  = await fetch(`actions/cancelar_turno.php?id=${id}`);
+                const data = await res.json();
 
-        const res  = await fetch(`actions/cancelar_turno.php?id=${id}`);
-        const data = await res.json();
-
-        if (data.ok) {
-            mostrarToast("Turno cancelado", "success");
-            setTimeout(() => location.reload(), 1200);
-        } else {
-            mostrarToast("Error al cancelar", "danger");
-        }
+                if (data.ok) {
+                    Swal.fire('Cancelado', 'El turno ha sido cancelado.', 'success').then(() => location.reload());
+                } else {
+                    Swal.fire('Error', 'Hubo un problema al cancelar el turno.', 'error');
+                }
+            }
+        });
     });
 });
 
